@@ -1,5 +1,7 @@
 # Desafio para entrevista de emprego com Laravel e Filament
 
+Deverá criar um site em Laravel e Filament para um sistema de eventos
+
 ### Informações do Projeto
 * Servidor de desenvolvimento: Wamp Server
 * Versão do Php: 8.3
@@ -19,7 +21,7 @@ Responsável por criar, gerenciar e promover eventos.
 - [ ] Visualizar lista de inscritos
 - [ ] Gerenciar inscrições.
 - [ ] Receber pagamentos
-- [ ] acompanhar o status financeiro do evento.
+- [ ] Acompanhar o status financeiro do evento.
 
 #### Inscrito
 Usuários que buscam participar de eventos, realizando inscrições e pagamentos.

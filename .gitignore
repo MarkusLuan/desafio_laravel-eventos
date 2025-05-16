@@ -10,6 +10,8 @@ public/hot
 # Laravel 5 & Lumen specific with changed public path
 public_html/storage
 public_html/hot
+/.nova
+/.zed
 
 # Composer
 composer.phar
@@ -27,10 +29,8 @@ Homestead.yaml
 filament-cli
 
 # Php
-storage/*.key
+storage/
 .env*
-Homestead.yaml
-Homestead.json
 /.vagrant
 .phpunit.result.cache
 .phpactor.json
