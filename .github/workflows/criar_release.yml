@@ -1,0 +1,32 @@
+name: Criar Release
+
+permissions:
+  contents: write
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+jobs:
+  release:
+    if: github.event.pull_request.merged == true
+    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+          TAG_VERSION: ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          tag_name: ${{ env.TAG_VERSION }}
+          release_name: ${{ env.TAG_VERSION }} - ${{ github.event.pull_request.title }}
+          body: |
+            ${{ github.event.pull_request.body }}
+          draft: true
+          prerelease: false
