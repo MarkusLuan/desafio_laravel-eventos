@@ -3,13 +3,35 @@
 Deverá criar um site em Laravel e Filament para um sistema de eventos
 
 ### Informações do Projeto
-* Servidor de desenvolvimento: Wamp Server
+* Servidor de desenvolvimento: artisan [interno]
 * Versão do Php: 8.3
 * Frameworks utilizados:
     * Composer
     * Laravel (Já vi por cima, mas nunca mexi)
     * Filament (Descobri agora sobre ele)
 * Prazo: Dia 26/05/2025 (Segunda-feira)
+
+---
+
+### Minhas anotações
+Bom pelo que vi, essa é a estrutura do Laravel (achei meio confusa e estranha, mas tem quem goste):
+```bash
+Root/
+├── app/                 => Código principal do projeto
+    ├── Http/Controllers => Controllers
+    ├── Models           => Models (Abstração de Tabelas)
+    ├── Providers        => Injetores de Serviços (Não sei se é o nome correto)
+├── config/              => Configurações do Projeto
+├── database/            => Informações do Banco de Dados
+├── node_modules/        => Dependencias do node
+├── public/              => Arquivos compilados do projeto
+├── resources/           => Assets do projeto (css, js e views)
+├── routes/  => Código para informar as rotas e atalhos de console
+├── storage/  => Arquivos temporários (Logs e Sessions)
+├── tests/  => Testes unitários
+└── vendor/  => Dependencias do composer
+
+```
 
 ---
 
@@ -98,4 +120,4 @@ Responsável pela manutenção e supervisão geral do marketplace.
 ### Funcionalidades Adicionais
 - [ ] Notificações: Enviar notificações por e-mail ou no aplicativo para lembretes de eventos, confirmações de inscrição, e atualizações importantes.
 - [ ] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
-Considerações de Segurança e Privacidade
+- [ ] Considerações de Segurança e Privacidade
