@@ -44,3 +44,6 @@ storage/
 /public/storage
 /storage/*.key
 /storage/pail
+
+# Meus arquivos
+*.bak

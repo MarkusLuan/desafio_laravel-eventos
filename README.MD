@@ -30,10 +30,12 @@ Root/
 ├── storage/  => Arquivos temporários (Logs e Sessions)
 ├── tests/  => Testes unitários
 └── vendor/  => Dependencias do composer
-
 ```
 
 ---
+
+### Estrutura do banco
+![Estrutura do Banco](./docs/estrutura_db.png)
 
 ### Permissões de Usuários
 #### Organizador
@@ -62,7 +64,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
 ### Entidades
 #### Eventos
 
-* Atributos:
+* [x] Atributos:
     * ID
     * Título
     * Descrição
@@ -78,7 +80,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     - [ ] Cancelamento.
 
 #### Inscrições
-* Atributos:
+* [x] Atributos:
     * ID
     * usuário inscrito
     * Evento
@@ -90,7 +92,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     - [ ] Histórico
 
 #### Pagamentos
-* Atributos:
+* [x] Atributos:
     * ID
     * Valor
     * Método de pagamento
@@ -102,7 +104,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     - [ ] Reembolsos
 
 #### Usuários
-* Atributos:
+* [x] Atributos:
     * ID
     * Nome
     * Email
