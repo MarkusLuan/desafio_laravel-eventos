@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use App\Models\Enums\MetodoPagamentoEnum;
+
 return new class extends Migration
 {
     /**
@@ -11,13 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('metodo_pagamentos', function (Blueprint $table) {
+        Schema::create('metodo_pagamento', function (Blueprint $table) {
             $table->id();
             $table->enum('metodo', array(
-                'BOLETO',
-                'CARTAO_DEBITO',
-                'CARTAO_CREDITO',
-                'PIX'
+                array_column(MetodoPagamentoEnum::cases(), 'name')
             ));
         });
     }

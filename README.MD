@@ -47,7 +47,7 @@ Responsável por criar, gerenciar e promover eventos.
 - [ ] Receber pagamentos
 - [ ] Acompanhar o status financeiro do evento.
 
-#### Inscrito
+#### Inscrito - Mudei para COMUM
 Usuários que buscam participar de eventos, realizando inscrições e pagamentos.
 - [ ] Procurar eventos por categoria, data ou localização
 - [ ] Se inscrever em eventos e realizar pagamentos
