@@ -29,10 +29,10 @@ class UsuarioFactory extends Factory
         return [
             'uuid' => fake()->uuid(),
             'dt_nascimento' => fake()->date(),
-            'nome' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => 'admin',
+            'email' => 'admin@teste.com',
             'email_verified_at' => now(),
-            'senha' => static::$senha ??= Hash::make('senha'),
+            'password' => Hash::make('senhaForte1234@'),
             'remember_token' => Str::random(10),
             'permissao_id' => Permissao::where('role', '=', PermissaoEnum::ADMINISTRADOR)->first()->id,
         ];
