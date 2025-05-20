@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Enums\PermissaoEnum;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Enums\PermissaoEnum;
 
 class Permissao extends Model
 {
