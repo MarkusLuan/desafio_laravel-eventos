@@ -17,8 +17,7 @@ return new class extends Migration
             $table->uuid('uuid')->default(str::uuid())->unique();
             $table->float('valor_pago');
             $table->integer('metodo_id')->unsigned();
-            $table->integer('usuario_id')->unsigned();
-            $table->integer('evento_id')->unsigned();
+            $table->integer('inscricao_id')->unsigned();
             $table->integer('status_pagamento_id')->unsigned();
             $table->timestamps();
 
@@ -26,13 +25,9 @@ return new class extends Migration
                 ->references('id')
                 ->on('metodo_pagamento');
             
-            $table->foreign('usuario_id')
+            $table->foreign('inscricao_id')
                 ->references('id')
-                ->on('usuarios');
-            
-            $table->foreign('evento_id')
-                ->references('id')
-                ->on('eventos');
+                ->on('inscricoes');
             
             $table->foreign('status_pagamento_id')
                 ->references('id')
