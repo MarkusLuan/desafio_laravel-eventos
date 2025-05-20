@@ -3,11 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+
+use App\Models\Enums\PermissaoEnum;
+
+class Usuario extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -18,9 +24,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'uuid',
+        'dt_nascimento',
         'name',
         'email',
         'password',
+        'permissao_id'
     ];
 
     /**
@@ -29,9 +38,28 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
+        'id',
+        'permissao_id',
         'password',
         'remember_token',
     ];
+
+    function permissao () {
+        return $this->belongsTo(Permissao::class, 'permissao_id');
+    }
+
+    public function isFilamentAdmin(): bool
+    {
+        return $this->permissao->role == PermissaoEnum::ADMINISTRADOR;
+    }
+
+    public function canAccessFilament (): bool {
+        return $this->isFilamentAdmin();
+    }
+
+    public function canAccessPanel(Panel $panel): bool {
+        return $this->isFilamentAdmin();
+    }
 
     /**
      * Get the attributes that should be cast.

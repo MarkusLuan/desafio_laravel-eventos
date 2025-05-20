@@ -3,7 +3,7 @@
 Deverá criar um site em Laravel e Filament para um sistema de eventos
 
 ### Informações do Projeto
-* Servidor de desenvolvimento: Wamp Server
+* Servidor de desenvolvimento: artisan [interno]
 * Versão do Php: 8.3
 * Frameworks utilizados:
     * Composer
@@ -12,6 +12,30 @@ Deverá criar um site em Laravel e Filament para um sistema de eventos
 * Prazo: Dia 26/05/2025 (Segunda-feira)
 
 ---
+
+### Minhas anotações
+Bom pelo que vi, essa é a estrutura do Laravel (achei meio confusa e estranha, mas tem quem goste):
+```bash
+Root/
+├── app/                 => Código principal do projeto
+    ├── Http/Controllers => Controllers
+    ├── Models           => Models (Abstração de Tabelas)
+    ├── Providers        => Injetores de Serviços (Não sei se é o nome correto)
+├── config/              => Configurações do Projeto
+├── database/            => Informações do Banco de Dados
+├── node_modules/        => Dependencias do node
+├── public/              => Arquivos compilados do projeto
+├── resources/           => Assets do projeto (css, js e views)
+├── routes/  => Código para informar as rotas e atalhos de console
+├── storage/  => Arquivos temporários (Logs e Sessions)
+├── tests/  => Testes unitários
+└── vendor/  => Dependencias do composer
+```
+
+---
+
+### Estrutura do banco
+![Estrutura do Banco](./docs/estrutura_db.png)
 
 ### Permissões de Usuários
 #### Organizador
@@ -23,7 +47,7 @@ Responsável por criar, gerenciar e promover eventos.
 - [ ] Receber pagamentos
 - [ ] Acompanhar o status financeiro do evento.
 
-#### Inscrito
+#### Inscrito - Mudei para COMUM
 Usuários que buscam participar de eventos, realizando inscrições e pagamentos.
 - [ ] Procurar eventos por categoria, data ou localização
 - [ ] Se inscrever em eventos e realizar pagamentos
@@ -40,7 +64,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
 ### Entidades
 #### Eventos
 
-* Atributos:
+* [x] Atributos:
     * ID
     * Título
     * Descrição
@@ -56,7 +80,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     - [ ] Cancelamento.
 
 #### Inscrições
-* Atributos:
+* [x] Atributos:
     * ID
     * usuário inscrito
     * Evento
@@ -68,7 +92,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     - [ ] Histórico
 
 #### Pagamentos
-* Atributos:
+* [x] Atributos:
     * ID
     * Valor
     * Método de pagamento
@@ -80,7 +104,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     - [ ] Reembolsos
 
 #### Usuários
-* Atributos:
+* [x] Atributos:
     * ID
     * Nome
     * Email
@@ -98,4 +122,4 @@ Responsável pela manutenção e supervisão geral do marketplace.
 ### Funcionalidades Adicionais
 - [ ] Notificações: Enviar notificações por e-mail ou no aplicativo para lembretes de eventos, confirmações de inscrição, e atualizações importantes.
 - [ ] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
-Considerações de Segurança e Privacidade
+- [ ] Considerações de Segurança e Privacidade
