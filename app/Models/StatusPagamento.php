@@ -2,9 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Enums\StatusPagamentoEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class StatusPagamento extends Model
 {
     protected $table = "status_pagamento";
+
+        function casts() {
+        return [
+            'status' => StatusPagamentoEnum::class
+        ];
+    }
 }

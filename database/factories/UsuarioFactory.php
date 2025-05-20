@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+use App\Models\Permissao;
+use App\Models\Enums\PermissaoEnum;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Usuario>
  */
@@ -24,11 +27,14 @@ class UsuarioFactory extends Factory
     public function definition(): array
     {
         return [
+            'uuid' => fake()->uuid(),
+            'dt_nascimento' => fake()->date(),
             'nome' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'senha' => static::$senha ??= Hash::make('senha'),
             'remember_token' => Str::random(10),
+            'permissao_id' => Permissao::where('role', '=', PermissaoEnum::ADMINISTRADOR)->first()->id,
         ];
     }
 

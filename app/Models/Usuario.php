@@ -18,9 +18,12 @@ class Usuario extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'nome',
+        'uuid',
+        'dt_nascimento',
+        'name',
         'email',
-        'senha',
+        'password',
+        'permissao_id'
     ];
 
     /**
@@ -29,9 +32,13 @@ class Usuario extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'senha',
+        'password',
         'remember_token',
     ];
+
+    function permissao () {
+        return $this->belongsTo(Permissao::class, 'permissoes', 'permissao_id');
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -42,7 +49,7 @@ class Usuario extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'senha' => 'hashed',
+            'password' => 'hashed',
         ];
     }
 }

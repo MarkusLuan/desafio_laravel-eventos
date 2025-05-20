@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => env('AUTH_GUARD', 'web'),
-        'passwords' => env('AUTH_PASSWORD_BROKER', 'usuarios'),
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
     /*
@@ -28,7 +28,7 @@ return [
     | which utilizes session storage plus the Eloquent usuario provider.
     |
     | All authentication guards have a usuario provider, which defines how the
-    | usuarios are actually retrieved out of your database or other storage
+    | users are actually retrieved out of your database or other storage
     | system used by the application. Typically, Eloquent is utilized.
     |
     | Supported: "session"
@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'usuarios',
+            'provider' => 'users',
         ],
     ],
 
@@ -48,7 +48,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | All authentication guards have a usuario provider, which defines how the
-    | usuarios are actually retrieved out of your database or other storage
+    | users are actually retrieved out of your database or other storage
     | system used by the application. Typically, Eloquent is utilized.
     |
     | If you have multiple usuario tables or models you may configure multiple
@@ -60,12 +60,12 @@ return [
     */
 
     'providers' => [
-        'usuarios' => [
+        'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\Usuario::class),
         ],
 
-        // 'usuarios' => [
+        // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'usuarios',
         // ],
@@ -78,7 +78,7 @@ return [
     |
     | These configuration options specify the behavior of Laravel's password
     | reset functionality, including the table utilized for token storage
-    | and the usuario provider that is invoked to actually retrieve usuarios.
+    | and the usuario provider that is invoked to actually retrieve users.
     |
     | The expiry time is the number of minutes that each reset token will be
     | considered valid. This security feature keeps tokens short-lived so
@@ -91,8 +91,8 @@ return [
     */
 
     'passwords' => [
-        'usuarios' => [
-            'provider' => 'usuarios',
+        'users' => [
+            'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
@@ -105,7 +105,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you may define the amount of seconds before a password confirmation
-    | window expires and usuarios are asked to re-enter their password via the
+    | window expires and users are asked to re-enter their password via the
     | confirmation screen. By default, the timeout lasts for three hours.
     |
     */
