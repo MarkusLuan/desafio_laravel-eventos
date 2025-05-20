@@ -26,11 +26,13 @@ Root/
 ├── node_modules/        => Dependencias do node
 ├── public/              => Arquivos compilados do projeto
 ├── resources/           => Assets do projeto (css, js e views)
-├── routes/  => Código para informar as rotas e atalhos de console
-├── storage/  => Arquivos temporários (Logs e Sessions)
-├── tests/  => Testes unitários
-└── vendor/  => Dependencias do composer
+├── routes/              => Código para informar as rotas e atalhos de console
+├── storage/             => Arquivos temporários (Logs e Sessions)
+├── tests/               => Testes unitários
+└── vendor/              => Dependencias do composer
 ```
+
+Minhas perguntas ao chatGPT: https://chatgpt.com/share/6828dd50-e790-8011-ab36-334dc0222c27
 
 ---
 
