@@ -37,7 +37,7 @@ class Usuario extends Authenticatable
     ];
 
     function permissao () {
-        return $this->belongsTo(Permissao::class, 'permissoes', 'permissao_id');
+        return $this->belongsTo(Permissao::class, 'permissao_id');
     }
 
     /**
