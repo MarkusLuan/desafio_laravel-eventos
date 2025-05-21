@@ -3,17 +3,16 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventoResource\Pages;
-use App\Filament\Resources\EventoResource\RelationManagers;
+use App\Models\Endereco;
 use App\Models\Evento;
-use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EventoResource extends Resource
 {
@@ -25,6 +24,17 @@ class EventoResource extends Resource
     {
         return $form
             ->schema([
+                // TODO: Não estava gravando o endereço
+                // Section::make('Endereço')->relationship('endereco')->columns(2)->schema([
+                //     TextInput::make('cep')->numeric()->length(8)->required(),
+                //     TextInput::make('logradouro')->required(),
+                //     TextInput::make('bairro')->required(),
+                //     TextInput::make('cidade')->required(),
+                //     TextInput::make('uf')->required(),
+                //     TextInput::make('numero')->numeric(),
+                //     TextInput::make('complemento')
+                // ]),
+
                 TextInput::make('titulo')->label('Título')->required(),
                 TextInput::make('descricao')->label('Descrição')->required(),
                 TextInput::make('capacidade')->numeric()->required(),
@@ -37,6 +47,8 @@ class EventoResource extends Resource
                     ->minDate(now()->setSeconds(0))
                     ->seconds(false)
                     ->required(),
+                Select::make('endereco_id')->label('Endereço')->relationship('endereco', 'id')
+                    ->getOptionLabelFromRecordUsing(fn (Endereco $record): string => (String) $record)
             ]);
     }
 
@@ -44,7 +56,13 @@ class EventoResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('titulo'),
+                TextColumn::make('capacidade'),
+                TextColumn::make('idade_min'),
+                TextColumn::make('preco'),
+                TextColumn::make('dt_evento'),
+                TextColumn::make('endereco')
+                    ->getStateUsing(fn (Evento $record) => (string) $record->endereco)
             ])
             ->filters([
                 //

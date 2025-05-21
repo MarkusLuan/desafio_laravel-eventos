@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Evento extends Model
 {
@@ -12,23 +13,25 @@ class Evento extends Model
         'capacidade',
         'idade_min',
         'preco',
-        'dt_evento'
+        'dt_evento',
+        'endereco_id'
     ];
 
     protected static function booted() {
         static::creating(function ($model) {
             if (auth()->check()) {
                 $model->organizador_id = auth()->id();
+                $model->uuid = Str::uuid();
             }
         });
     }
 
 
     public function organizador() {
-        return $this->belongsTo(Usuario::class, 'organizador_id');
+        return $this->hasOne(Usuario::class);
     }
 
     public function endereco() {
-        return $this->belongsTo(Endereco::class, 'endereco_id');
+        return $this->belongsTo(Endereco::class);
     }
 }
