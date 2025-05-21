@@ -10,7 +10,7 @@ enum MetodoPagamentoEnum {
     case CARTAO_CREDITO;
     case PIX;
 
-    function to_string() {
+    function toString(): String {
         return Str::title(
             str_replace('_', ' ', $this->name)
         );

@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EnderecoResource\Pages;
 use App\Filament\Resources\EnderecoResource\RelationManagers;
 use App\Models\Endereco;
+use App\Models\Enums\EstadoEnum;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,7 +30,9 @@ class EnderecoResource extends Resource
                 TextInput::make('logradouro')->required(),
                 TextInput::make('bairro')->required(),
                 TextInput::make('cidade')->required(),
-                TextInput::make('uf')->required(),
+                Select::make('uf')->options(
+                    EstadoEnum::class
+                )->required(),
                 TextInput::make('numero')->numeric(),
                 TextInput::make('complemento')
             ]);
