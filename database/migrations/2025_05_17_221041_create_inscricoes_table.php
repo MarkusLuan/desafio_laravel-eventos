@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('inscricoes', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->default(str::uuid())->unique();
+            $table->uuid('uuid')->unique();
             $table->integer('evento_id')->unsigned();
             $table->integer('usuario_id')->unsigned();
             $table->integer('status_inscricao_id')->unsigned();

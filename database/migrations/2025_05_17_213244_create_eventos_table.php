@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->default(str::uuid())->unique();
+            $table->uuid('uuid')->unique();
             $table->datetime('dt_evento');
             $table->datetime('dt_cancelamento')->nullable();
             $table->string('titulo');

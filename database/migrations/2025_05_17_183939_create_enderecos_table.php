@@ -14,10 +14,11 @@ return new class extends Migration
     {
         Schema::create('enderecos', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->default(str::uuid())->unique();
+            $table->uuid('uuid')->unique();
             $table->string('logradouro');
             $table->string('bairro');
             $table->string('cidade');
+            $table->string('uf');
             $table->string('cep');
             $table->integer('numero')->nullable();
             $table->string('complemento')->nullable();
