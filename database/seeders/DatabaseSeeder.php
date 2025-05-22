@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
             MetodoPagamentoSeeder::class,
             PermissoesSeeder::class,
             StatusInscricaoSeeder::class,
-            StatusPagamentoSeeder::class
+            StatusPagamentoSeeder::class,
         ]);
+        
+        Usuario::factory(1)->create();
     }
 }

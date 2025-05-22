@@ -10,7 +10,7 @@ enum StatusPagamentoEnum {
     case EXTORNADO;
     case CANCELADO;
 
-    function to_string() {
+    function toString(): String {
         return Str::title(
             str_replace('_', ' ', $this->name)
         );

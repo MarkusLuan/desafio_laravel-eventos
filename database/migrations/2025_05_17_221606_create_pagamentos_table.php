@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('pagamentos', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->default(str::uuid())->unique();
+            $table->uuid('uuid')->unique();
             $table->float('valor_pago');
             $table->integer('metodo_id')->unsigned();
             $table->integer('inscricao_id')->unsigned();

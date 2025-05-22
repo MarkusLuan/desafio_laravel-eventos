@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('permissoes', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->default(str::uuid())->unique();
+            $table->uuid('uuid')->unique();
             $table->enum('role', array_column(
                 PermissaoEnum::cases(), 'name')
             );

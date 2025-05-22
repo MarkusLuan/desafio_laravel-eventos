@@ -9,7 +9,7 @@ enum PermissaoEnum {
     case ORGANIZADOR;
     case ADMINISTRADOR;
 
-    function to_string() {
+    function toString(): String {
         return Str::title(
             str_replace('_', ' ', $this->name)
         );
