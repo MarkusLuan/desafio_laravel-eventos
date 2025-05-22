@@ -27,7 +27,7 @@ class EnderecoResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('cep')->numeric()->length(8)->required(),
+                TextInput::make('cep')->numeric()->length(8)->autofocus()->required(),
                 TextInput::make('logradouro')->required(),
                 TextInput::make('bairro')->required(),
                 TextInput::make('cidade')->required(),

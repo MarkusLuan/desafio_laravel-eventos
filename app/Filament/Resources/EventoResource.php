@@ -35,12 +35,12 @@ class EventoResource extends Resource
                 //     TextInput::make('complemento')
                 // ]),
 
-                TextInput::make('titulo')->label('Título')->required(),
+                TextInput::make('titulo')->label('Título')->autofocus()->required(),
                 TextInput::make('descricao')->label('Descrição')->required(),
                 TextInput::make('capacidade')->numeric()->required(),
                 TextInput::make('idade_min')->label('Idade minima')->numeric()->placeholder('Deixar vazio, caso seja livre para todas as faixas etárias!'),
                 TextInput::make('preco')->label('Preço')->numeric()->required(),
-                DateTimePicker::make('dt_evento')->label('Data do Evento')->autofocus()
+                DateTimePicker::make('dt_evento')->label('Data do Evento')
                     ->displayFormat('F j, Y H:i')
                     ->firstDayOfWeek(1)
                     ->format('Y-m-d H:i')
@@ -49,7 +49,7 @@ class EventoResource extends Resource
                     ->required(),
                 Select::make('endereco_id')->label('Endereço')->relationship('endereco', 'id')
                     ->getOptionLabelFromRecordUsing(fn (Endereco $record): string => (String) $record)
-                    ->createOptionForm(fn (Form $form) => EnderecoResource::form($form))
+                    ->createOptionForm(fn (Form $form) => EnderecoResource::form($form)->columns(2))
                     ->required()
             ]);
     }
