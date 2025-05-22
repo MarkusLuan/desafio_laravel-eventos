@@ -12,6 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -42,7 +43,11 @@ class EnderecoResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('logradouro'),
+                TextColumn::make('bairro'),
+                TextColumn::make('cidade'),
+                TextColumn::make('uf'),
+                TextColumn::make('numero'),
             ])
             ->filters([
                 //

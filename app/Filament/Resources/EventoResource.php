@@ -49,6 +49,8 @@ class EventoResource extends Resource
                     ->required(),
                 Select::make('endereco_id')->label('Endereço')->relationship('endereco', 'id')
                     ->getOptionLabelFromRecordUsing(fn (Endereco $record): string => (String) $record)
+                    ->createOptionForm(fn (Form $form) => EnderecoResource::form($form))
+                    ->required()
             ]);
     }
 
