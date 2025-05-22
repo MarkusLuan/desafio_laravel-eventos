@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pagamento extends Model
 {
     function metodo() {
-        return $this->belongsTo(MetodoPagamento::class, 'metodo_pagamento_id');
+        return $this->belongsTo(MetodoPagamento::class, 'metodo_id');
     }
 
     function inscricao() {

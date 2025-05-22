@@ -102,7 +102,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     * Data
 * Funcionalidades:
     - [ ] Processamento de pagamentos
-    - [ ] Histórico
+    - [x] Histórico
     - [ ] Reembolsos
 
 #### Usuários
