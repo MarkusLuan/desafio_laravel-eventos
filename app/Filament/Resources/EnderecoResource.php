@@ -3,10 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EnderecoResource\Pages;
-use App\Filament\Resources\EnderecoResource\RelationManagers;
-use App\Models\Endereco;
-use App\Models\Enums\EstadoEnum;
-use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -14,8 +10,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use App\Models\Endereco;
+use App\Models\Enums\EstadoEnum;
 
 class EnderecoResource extends Resource
 {
@@ -53,7 +50,6 @@ class EnderecoResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -74,7 +70,6 @@ class EnderecoResource extends Resource
         return [
             'index' => Pages\ListEnderecos::route('/'),
             'create' => Pages\CreateEndereco::route('/create'),
-            'edit' => Pages\EditEndereco::route('/{record}/edit'),
         ];
     }
 }
