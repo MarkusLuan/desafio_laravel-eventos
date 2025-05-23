@@ -64,9 +64,8 @@ class PagamentoResource extends Resource
                         }
                     ])
                     ->formatStateUsing(fn ($state, $record) => $state->toString()),
-                TextColumn::make('pagamento.inscricao.evento')
-                    ->label("Evento")
-                    ->formatStateUsing(fn ($state, $record) => "#$state->id - $state->titulo"),
+                TextColumn::make('pagamento.inscricao.evento.display_name')
+                    ->label("Evento"),
                 TextColumn::make('pagamento.inscricao.evento.dt_evento')
                     ->label("Data do Evento")
                     ->datetime('d/m/Y \à\s H:i'),

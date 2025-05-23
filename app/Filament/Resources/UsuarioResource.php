@@ -46,7 +46,7 @@ class UsuarioResource extends Resource
                     ->time(false)
                     ->required(),
                 Select::make('permissao_id')->label('Permissão')->relationship('permissao', 'id')
-                    ->getOptionLabelFromRecordUsing(fn (Permissao $record): string => (String) $record->role->toString())
+                    ->getOptionLabelFromRecordUsing(fn (Permissao $record): string => $record->role->toString())
                     ->required(),
                 TextInput::make('password')
                     ->label('Senha')

@@ -34,4 +34,13 @@ class Evento extends Model
     public function endereco() {
         return $this->belongsTo(Endereco::class);
     }
+
+    public function __toString()
+    {
+        return "#$this->id - $this->titulo";
+    }
+
+    public function getDisplayNameAttribute() {
+        return (String) $this;
+    }
 }
