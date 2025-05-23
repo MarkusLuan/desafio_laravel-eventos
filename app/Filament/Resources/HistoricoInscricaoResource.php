@@ -3,21 +3,19 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\HistoricoInscricaoResource\Pages;
-use App\Filament\Resources\HistoricoInscricaoResource\RelationManagers;
-use App\Models\HistoricoInscricao;
-use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use App\Models\Enums\StatusInscricaoEnum;
+use App\Models\HistoricoInscricao;
 
 class HistoricoInscricaoResource extends Resource
 {
     protected static ?string $model = HistoricoInscricao::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     protected static ?string $label = 'Histórico Inscrições';
     protected static ?string $navigationLabel = 'Histórico Inscrições';
@@ -33,7 +31,21 @@ class HistoricoInscricaoResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('created_at')
+                    ->label('Data de Alteração'),
+                TextColumn::make('inscricao.evento.display_name')
+                    ->label('Evento'),
+                TextColumn::make('status.status')
+                    ->label('Situação')
+                    ->badge()
+                    ->colors([
+                        'success' => static fn ($state): bool => $state == StatusInscricaoEnum::INSCRITO,
+                        'warning' => static fn ($state): bool => $state == StatusInscricaoEnum::ESPERANDO_PAGAMENTO,
+                        'danger' => static fn ($state): bool => $state == StatusInscricaoEnum::CANCELADO
+                    ])
+                    ->formatStateUsing(fn ($state, $record) => $state->toString()),
+                TextColumn::make('inscricao.inscrito.name')
+                    ->label('Inscrito'),
             ])
             ->filters([
                 //
