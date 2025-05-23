@@ -32,7 +32,8 @@ class UsuarioResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label('Nome')
+                    ->label('Nome Completo')
+                    ->minLength(3)
                     ->required(),
                 TextInput::make('email')
                     ->email()
@@ -50,6 +51,8 @@ class UsuarioResource extends Resource
                 TextInput::make('password')
                     ->label('Senha')
                     ->password()
+                    ->minLength(5)
+                    ->maxLength(20)
                     ->autocomplete('new-password')
                     ->suffixActions([
                         Action::make('tgl_pass') // Action para mostrar ou esconder a senha
@@ -61,14 +64,14 @@ class UsuarioResource extends Resource
                         Action::make('mk_pass') // Action para gerar uma senha aleatória - Caso o metódo do navegador falhe
                             ->label('Gerar Senha')
                             ->action (function (array $arguments, Set $set) {
-                                $senha = Str::random(8) . random_int(0, 900) . array('!', '@', '*')[random_int(0, 2)];
+                                $senha = Str::random(10) . random_int(0, 900) . array('!', '@', '*')[random_int(0, 2)];
                                 $set('password', $senha);
                             })
                             ->icon('heroicon-o-arrow-path')
                     ])
                      ->extraInputAttributes(fn (Get $get) => ['type' => $get('showPass') ? 'text' : 'password']) // Esconder ou mostrar a senha
                     ->required(),
-            ]);
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
