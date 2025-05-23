@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventoResource\Pages;
+use App\Filament\Resources\EventoResource\Actions\InscreverEventoAction;
 use App\Models\Endereco;
 use App\Models\Evento;
 use Filament\Forms\Components\DateTimePicker;
@@ -95,6 +96,7 @@ class EventoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                InscreverEventoAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
