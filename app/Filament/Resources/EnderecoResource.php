@@ -28,7 +28,7 @@ class EnderecoResource extends Resource
                 TextInput::make('logradouro')->required(),
                 TextInput::make('bairro')->required(),
                 TextInput::make('cidade')->required(),
-                Select::make('uf')->options(
+                Select::make('uf')->label('Estado')->options(
                     EstadoEnum::class
                 )->required(),
                 TextInput::make('numero')->numeric(),
@@ -40,11 +40,19 @@ class EnderecoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('logradouro'),
-                TextColumn::make('bairro'),
-                TextColumn::make('cidade'),
-                TextColumn::make('uf'),
-                TextColumn::make('numero'),
+                TextColumn::make('logradouro')
+                    ->searchable(),
+                TextColumn::make('bairro')
+                    ->searchable(),
+                TextColumn::make('cidade')
+                    ->searchable(),
+                TextColumn::make('uf')
+                    ->label('Estado')
+                    ->searchable(),
+                TextColumn::make('numero')
+                    ->searchable(),
+                TextColumn::make('complemento')
+                    ->searchable(),
             ])
             ->filters([
                 //

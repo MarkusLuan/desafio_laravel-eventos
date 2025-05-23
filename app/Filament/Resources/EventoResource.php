@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class EventoResource extends Resource
 {
@@ -59,7 +60,13 @@ class EventoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('titulo')
-                    ->label('Título'),
+                    ->label('Título')
+                    ->description(fn (Evento $record): String => $record->descricao)
+                    ->wrap()
+                    ->searchable([
+                        'titulo',
+                        'descricao'
+                    ]),
                 TextColumn::make('capacidade')
                     ->label('Capacidade'),
                 TextColumn::make('idade_min')
@@ -74,9 +81,14 @@ class EventoResource extends Resource
                     ->datetime('d/m/Y \à\s H:i')
                     ->badge()
                     ->color('danger'),
-                TextColumn::make('endereco')
+                TextColumn::make('endereco.display_name')
                     ->label('Endereço')
-                    ->getStateUsing(fn (Evento $record) => (string) $record->endereco)
+                    ->searchable([
+                        'logradouro',
+                        'bairro',
+                        'cidade',
+                        'uf',
+                    ])
             ])
             ->filters([
                 //

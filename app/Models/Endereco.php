@@ -34,6 +34,20 @@ class Endereco extends Model
     }
 
     public function __toString(): String {
-        return "$this->logradouro, $this->bairro, $this->cidade/$this->uf";
+        $numero_complemento = "";
+        if ($this->numero) {
+            $numero_complemento .= "Nº $this->numero";
+        }
+
+        if ($this->complemento) {
+            if ($numero_complemento) $numero_complemento .= " ";
+            $numero_complemento .= "$this->complemento";
+        }
+
+        return "$this->logradouro, $this->bairro, $numero_complemento, $this->cidade/$this->uf";
+    }
+
+    public function getDisplayNameAttribute() {
+        return (String) $this;
     }
 }

@@ -76,8 +76,8 @@ Responsável pela manutenção e supervisão geral do marketplace.
     * Capacidade
     * Preço
 * Funcionalidades:
-    - [ ] Listagem
-    - [ ] Busca
+    - [x] Listagem
+    - [x] Busca
     - [ ] Inscrição
     - [ ] Cancelamento.
 
@@ -117,7 +117,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
         * administrador
 * Funcionalidades:
     - [ ] Registro
-    - [ ] Autenticação
+    - [x] Autenticação
     - [ ] Edição de perfil
 
 
