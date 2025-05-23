@@ -54,13 +54,8 @@ class UsuarioResource extends Resource
                     ->minLength(5)
                     ->maxLength(20)
                     ->autocomplete('new-password')
+                    ->revealable(filament()->arePasswordsRevealable())
                     ->suffixActions([
-                        Action::make('tgl_pass') // Action para mostrar ou esconder a senha
-                            ->label('Ver/Ocultar Senha')
-                            ->icon(fn (Get $get) => $get('showPass') ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
-                            ->action(function (Get $get, Set $set) {
-                                $set('showPass', !$get('showPass'));
-                            }),
                         Action::make('mk_pass') // Action para gerar uma senha aleatória - Caso o metódo do navegador falhe
                             ->label('Gerar Senha')
                             ->action (function (array $arguments, Set $set) {
@@ -69,7 +64,6 @@ class UsuarioResource extends Resource
                             })
                             ->icon('heroicon-o-arrow-path')
                     ])
-                     ->extraInputAttributes(fn (Get $get) => ['type' => $get('showPass') ? 'text' : 'password']) // Esconder ou mostrar a senha
                     ->required(),
             ])->columns(3);
     }
