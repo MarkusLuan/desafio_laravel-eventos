@@ -17,8 +17,8 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->datetime('dt_evento');
             $table->datetime('dt_cancelamento')->nullable();
-            $table->string('titulo');
-            $table->string('descricao');
+            $table->string('titulo', 100);
+            $table->string('descricao', 400);
             $table->integer('capacidade');
             $table->integer('idade_min')->nullable();
             $table->float('preco');

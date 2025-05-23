@@ -5,6 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
+use App\Models\Enums\EstadoEnum;
+
 return new class extends Migration
 {
     /**
@@ -18,8 +20,10 @@ return new class extends Migration
             $table->string('logradouro');
             $table->string('bairro');
             $table->string('cidade');
-            $table->string('uf');
-            $table->string('cep');
+            $table->enum('uf', array(
+                array_column(EstadoEnum::cases(), 'name')
+            ));
+            $table->string('cep', 11);
             $table->integer('numero')->nullable();
             $table->string('complemento')->nullable();
             $table->timestamps();
