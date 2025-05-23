@@ -3,17 +3,23 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UsuarioResource\Pages;
-use App\Filament\Resources\UsuarioResource\RelationManagers;
-use App\Models\Enums\PermissaoEnum;
-use App\Models\Usuario;
-use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use Illuminate\Support\Str;
+
+use App\Models\Enums\PermissaoEnum;
+use App\Models\Permissao;
+use App\Models\Usuario;
+use Filament\Forms\Get;
 
 class UsuarioResource extends Resource
 {
@@ -25,7 +31,43 @@ class UsuarioResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name')
+                    ->label('Nome')
+                    ->required(),
+                TextInput::make('email')
+                    ->email()
+                    ->required(),
+                DateTimePicker::make('dt_nascimento')->label('Data de Nascimento')
+                    ->displayFormat('d/m/Y')
+                    ->firstDayOfWeek(1)
+                    ->format('Y-m-d')
+                    ->maxDate(now())
+                    ->time(false)
+                    ->required(),
+                Select::make('permissao_id')->label('Permissão')->relationship('permissao', 'id')
+                    ->getOptionLabelFromRecordUsing(fn (Permissao $record): string => (String) $record->role->toString())
+                    ->required(),
+                TextInput::make('password')
+                    ->label('Senha')
+                    ->password()
+                    ->autocomplete('new-password')
+                    ->suffixActions([
+                        Action::make('tgl_pass') // Action para mostrar ou esconder a senha
+                            ->label('Ver/Ocultar Senha')
+                            ->icon(fn (Get $get) => $get('showPass') ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
+                            ->action(function (Get $get, Set $set) {
+                                $set('showPass', !$get('showPass'));
+                            }),
+                        Action::make('mk_pass') // Action para gerar uma senha aleatória - Caso o metódo do navegador falhe
+                            ->label('Gerar Senha')
+                            ->action (function (array $arguments, Set $set) {
+                                $senha = Str::random(8) . random_int(0, 900) . array('!', '@', '*')[random_int(0, 2)];
+                                $set('password', $senha);
+                            })
+                            ->icon('heroicon-o-arrow-path')
+                    ])
+                     ->extraInputAttributes(fn (Get $get) => ['type' => $get('showPass') ? 'text' : 'password']) // Esconder ou mostrar a senha
+                    ->required(),
             ]);
     }
 
@@ -33,8 +75,6 @@ class UsuarioResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->label('#'),
                 TextColumn::make('name')
                     ->label('Nome'),
                 TextColumn::make('email'),

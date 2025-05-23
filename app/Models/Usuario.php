@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -59,6 +60,12 @@ class Usuario extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool {
         return $this->isFilamentAdmin();
+    }
+
+    protected static function booted() {
+        static::creating(function ($model) {
+            $model->uuid = Str::uuid();
+        });
     }
 
     /**
