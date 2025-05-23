@@ -35,12 +35,13 @@ class PagamentoResource extends Resource
                 TextColumn::make('pagamento.uuid')
                     ->label('Código'),
                 TextColumn::make('created_at')
-                    ->datetime('d/m/Y \à\s H:i')
-                    ->label('Data do Histórico'),
+                    ->label('Data do Histórico')
+                    ->datetime('d/m/Y \à\s H:i'),
                 TextColumn::make('pagamento.valor_pago')
-                    ->money('BRL')
-                    ->label("Valor Pago"),
+                    ->label("Valor Pago")
+                    ->money('BRL'),
                 TextColumn::make('status.status')
+                    ->label('Status')
                     ->badge()
                     ->colors([
                         'success' => static fn ($state): bool => $state == StatusPagamentoEnum::APROVADO,
@@ -50,9 +51,9 @@ class PagamentoResource extends Resource
                                 $state == StatusPagamentoEnum::EXTORNADO;
                         }
                     ])
-                    ->formatStateUsing(fn ($state, $record) => $state->toString())
-                    ->label('Status'),
+                    ->formatStateUsing(fn ($state, $record) => $state->toString()),
                 TextColumn::make('pagamento.metodo.metodo')
+                    ->label('Metodo')
                     ->badge()
                     ->colors([
                         'success' => static fn ($state): bool => $state == MetodoPagamentoEnum::BOLETO,
@@ -62,14 +63,13 @@ class PagamentoResource extends Resource
                                 $state == MetodoPagamentoEnum::CARTAO_DEBITO;
                         }
                     ])
-                    ->formatStateUsing(fn ($state, $record) => $state->toString())
-                    ->label('Metodo'),
+                    ->formatStateUsing(fn ($state, $record) => $state->toString()),
                 TextColumn::make('pagamento.inscricao.evento')
-                    ->formatStateUsing(fn ($state, $record) => "#$state->id - $state->titulo")
-                    ->label("Evento"),
+                    ->label("Evento")
+                    ->formatStateUsing(fn ($state, $record) => "#$state->id - $state->titulo"),
                 TextColumn::make('pagamento.inscricao.evento.dt_evento')
-                    ->datetime('d/m/Y \à\s H:i')
-                    ->label("Data do Evento"),
+                    ->label("Data do Evento")
+                    ->datetime('d/m/Y \à\s H:i'),
             ])
             ->filters([
                 //
