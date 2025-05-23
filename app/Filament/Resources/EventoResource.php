@@ -58,12 +58,24 @@ class EventoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('titulo'),
-                TextColumn::make('capacidade'),
-                TextColumn::make('idade_min'),
-                TextColumn::make('preco'),
-                TextColumn::make('dt_evento'),
+                TextColumn::make('titulo')
+                    ->label('Título'),
+                TextColumn::make('capacidade')
+                    ->label('Capacidade'),
+                TextColumn::make('idade_min')
+                    ->label('Idade Min.'),
+                TextColumn::make('preco')
+                    ->label('Preço'),
+                TextColumn::make('dt_evento')
+                    ->label('Data do Evento')
+                    ->datetime('d/m/Y \à\s H:i'),
+                TextColumn::make('dt_cancelamento')
+                    ->label('Cancelado em')
+                    ->datetime('d/m/Y \à\s H:i')
+                    ->badge()
+                    ->color('danger'),
                 TextColumn::make('endereco')
+                    ->label('Endereço')
                     ->getStateUsing(fn (Evento $record) => (string) $record->endereco)
             ])
             ->filters([
