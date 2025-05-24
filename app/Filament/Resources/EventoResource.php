@@ -4,8 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventoResource\Pages;
 use App\Filament\Resources\EventoResource\Actions\InscreverEventoAction;
-use App\Models\Endereco;
-use App\Models\Evento;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -14,7 +12,10 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+
+use App\Models\Endereco;
+use App\Models\Evento;
+use App\Models\Inscricao;
 
 class EventoResource extends Resource
 {
@@ -58,6 +59,14 @@ class EventoResource extends Resource
 
     public static function table(Table $table): Table
     {
+        function isInscrito (Evento $record): bool {
+            $isInscrito = Inscricao::where('usuario_id', auth()->id())
+                ->where('evento_id', $record->id)
+                ->exists();
+
+            return $isInscrito;
+        }
+
         return $table
             ->columns([
                 TextColumn::make('titulo')
@@ -97,6 +106,12 @@ class EventoResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 InscreverEventoAction::make()
+                    ->visible(function (Evento $record) {
+                        $isInscrito = isInscrito($record);
+                        $maiorIdadePermitida = auth()->user()->idade >= $record->idade_min;
+
+                        return !$isInscrito and $maiorIdadePermitida;
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

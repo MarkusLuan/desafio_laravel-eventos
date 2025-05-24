@@ -21,7 +21,7 @@ class InscreverEventoAction extends Action
 
     public static function getDefaultName(): ?string
     {
-        return 'inscrever';
+        return 'Inscrever';
     }
 
     protected function setUp(): void

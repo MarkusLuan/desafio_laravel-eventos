@@ -78,6 +78,7 @@ class UsuarioResource extends Resource
                 TextColumn::make('dt_nascimento')
                     ->datetime('d/m/Y')
                     ->label('Data de Nascimento'),
+                TextColumn::make('idade'),
                 TextColumn::make('permissao.role')
                     ->badge()
                     ->colors([

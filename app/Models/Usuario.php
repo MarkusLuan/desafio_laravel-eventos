@@ -13,6 +13,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
 use App\Models\Enums\PermissaoEnum;
+use DateTime;
 
 class Usuario extends Authenticatable implements FilamentUser
 {
@@ -47,6 +48,17 @@ class Usuario extends Authenticatable implements FilamentUser
 
     function permissao () {
         return $this->belongsTo(Permissao::class, 'permissao_id');
+    }
+
+    function getIdadeAttribute(): int {
+        // Função que calcula a idade
+
+        $dt_nascimento = date_create_from_format('Y-m-d', $this->dt_nascimento);
+
+        $idade = $dt_nascimento
+            ->diff(new DateTime('now'))
+            ->y;
+        return $idade;
     }
 
     public function isFilamentAdmin(): bool
