@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EventoResource\Actions\CancelarInscricaoEventoAction;
+use App\Filament\Resources\EventoResource\Actions\DeleteInscricaoEventoAction;
+use App\Filament\Resources\EventoResource\Actions\CreateInscricaoEventoAction;
 use App\Filament\Resources\EventoResource\Pages;
-use App\Filament\Resources\EventoResource\Actions\InscreverEventoAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -114,7 +114,7 @@ class EventoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                InscreverEventoAction::make()
+                CreateInscricaoEventoAction::make()
                     ->visible(function (Evento $record) {
                         $isInscrito = isInscrito($record);
                         $maiorIdadePermitida = auth()->user()->idade >= $record->idade_min;
@@ -122,7 +122,7 @@ class EventoResource extends Resource
                         return !$isInscrito and
                             $maiorIdadePermitida;
                     }),
-                CancelarInscricaoEventoAction::make()
+                DeleteInscricaoEventoAction::make()
                     ->visible(function (Evento $record) {
                         $isPodeCancelar = false;
 
