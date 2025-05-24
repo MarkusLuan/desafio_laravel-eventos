@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PagamentoResource\Pages;
-use App\Filament\Resources\PagamentoResource\RelationManagers;
+use App\Filament\Resources\HistoricoPagamentoResource\Pages;
+use App\Filament\Resources\HistoricoPagamentoResource\RelationManagers;
 use App\Models\Enums\MetodoPagamentoEnum;
 use App\Models\Enums\StatusPagamentoEnum;
 use App\Models\HistoricoPagamento;
@@ -18,15 +18,18 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PagamentoResource extends Resource
+class HistoricoPagamentoResource extends Resource
 {
     protected static ?string $model = HistoricoPagamento::class;
 
-    protected static ?string $label = 'Pagamentos';
-    protected static ?string $navigationLabel = 'Pagamentos';
     protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';
 
     public static function canCreate(): bool { return false; }
+
+    public static function getRoutePrefix(): string
+    {
+        return "/historico/pagamentos";
+    }
 
     public static function table(Table $table): Table
     {
@@ -64,9 +67,8 @@ class PagamentoResource extends Resource
                         }
                     ])
                     ->formatStateUsing(fn ($state, $record) => $state->toString()),
-                TextColumn::make('pagamento.inscricao.evento')
-                    ->label("Evento")
-                    ->formatStateUsing(fn ($state, $record) => "#$state->id - $state->titulo"),
+                TextColumn::make('pagamento.inscricao.evento.display_name')
+                    ->label("Evento"),
                 TextColumn::make('pagamento.inscricao.evento.dt_evento')
                     ->label("Data do Evento")
                     ->datetime('d/m/Y \à\s H:i'),
@@ -83,7 +85,7 @@ class PagamentoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPagamentos::route('/'),
+            'index' => Pages\ListHistoricoPagamentos::route('/'),
         ];
     }
 }

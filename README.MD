@@ -76,9 +76,9 @@ Responsável pela manutenção e supervisão geral do marketplace.
     * Capacidade
     * Preço
 * Funcionalidades:
-    - [ ] Listagem
-    - [ ] Busca
-    - [ ] Inscrição
+    - [x] Listagem
+    - [x] Busca
+    - [x] Inscrição
     - [ ] Cancelamento.
 
 #### Inscrições
@@ -89,9 +89,9 @@ Responsável pela manutenção e supervisão geral do marketplace.
     * Data de Inscrição
     * Status
 * Funcionalidades:
-    - [ ] Realização de inscrição
-    - [ ] Cancelamento
-    - [ ] Histórico
+    - [x] Realização de inscrição
+    - [x] Cancelamento
+    - [x] Histórico
 
 #### Pagamentos
 * [x] Atributos:
@@ -117,7 +117,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
         * administrador
 * Funcionalidades:
     - [ ] Registro
-    - [ ] Autenticação
+    - [x] Autenticação
     - [ ] Edição de perfil
 
 

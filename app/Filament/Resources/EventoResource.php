@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\EventoResource\Actions\CancelarInscricaoEventoAction;
 use App\Filament\Resources\EventoResource\Pages;
-use App\Models\Endereco;
-use App\Models\Evento;
+use App\Filament\Resources\EventoResource\Actions\InscreverEventoAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -13,6 +13,13 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+
+use App\Models\Endereco;
+use App\Models\Enums\StatusInscricaoEnum;
+use App\Models\Evento;
+use App\Models\Inscricao;
+use App\Models\StatusInscricao;
+use DateTime;
 
 class EventoResource extends Resource
 {
@@ -56,21 +63,80 @@ class EventoResource extends Resource
 
     public static function table(Table $table): Table
     {
+        function isInscrito (Evento $record): bool {
+            $status_inscricao_id = StatusInscricao::where(
+                'status', StatusInscricaoEnum::CANCELADO
+            )->first()->id;
+
+            $isInscrito = Inscricao::where('usuario_id', auth()->id())
+                ->where('evento_id', $record->id)
+                ->where('status_inscricao_id', '!=', $status_inscricao_id)
+                ->exists();
+
+            return $isInscrito;
+        }
+
         return $table
             ->columns([
-                TextColumn::make('titulo'),
-                TextColumn::make('capacidade'),
-                TextColumn::make('idade_min'),
-                TextColumn::make('preco'),
-                TextColumn::make('dt_evento'),
-                TextColumn::make('endereco')
-                    ->getStateUsing(fn (Evento $record) => (string) $record->endereco)
+                TextColumn::make('titulo')
+                    ->label('Título')
+                    ->description(fn (Evento $record): String => $record->descricao)
+                    ->wrap()
+                    ->searchable([
+                        'titulo',
+                        'descricao'
+                    ]),
+                TextColumn::make('capacidade')
+                    ->label('Capacidade'),
+                TextColumn::make('idade_min')
+                    ->label('Idade Min.'),
+                TextColumn::make('preco')
+                    ->label('Preço'),
+                TextColumn::make('dt_evento')
+                    ->label('Data do Evento')
+                    ->datetime('d/m/Y \à\s H:i'),
+                TextColumn::make('dt_cancelamento')
+                    ->label('Cancelado em')
+                    ->datetime('d/m/Y \à\s H:i')
+                    ->badge()
+                    ->color('danger'),
+                TextColumn::make('endereco.display_name')
+                    ->label('Endereço')
+                    ->searchable([
+                        'logradouro',
+                        'bairro',
+                        'cidade',
+                        'uf',
+                    ])
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                InscreverEventoAction::make()
+                    ->visible(function (Evento $record) {
+                        $isInscrito = isInscrito($record);
+                        $maiorIdadePermitida = auth()->user()->idade >= $record->idade_min;
+
+                        return !$isInscrito and
+                            $maiorIdadePermitida;
+                    }),
+                CancelarInscricaoEventoAction::make()
+                    ->visible(function (Evento $record) {
+                        $isPodeCancelar = false;
+
+                        $tempo_para_evento = $record->dt_evento->diff(
+                            new DateTime('now')
+                        );
+                        
+                        // Garantindo que só possa cancelar em eventos inscritos com pelo menos 1 dia e 5 horas de antecedencia
+                        $isPodeCancelar = isInscrito($record) &&
+                            $tempo_para_evento->d > 1 ||
+                            ($tempo_para_evento->d == 1 && $tempo_para_evento->h >= 5);
+
+                        return $isPodeCancelar;
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
