@@ -19,6 +19,7 @@ use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Evento;
 use App\Models\Inscricao;
 use App\Models\StatusInscricao;
+use DateTime;
 
 class EventoResource extends Resource
 {
@@ -123,7 +124,18 @@ class EventoResource extends Resource
                     }),
                 CancelarInscricaoEventoAction::make()
                     ->visible(function (Evento $record) {
-                        return isInscrito($record);
+                        $isPodeCancelar = false;
+
+                        $tempo_para_evento = $record->dt_evento->diff(
+                            new DateTime('now')
+                        );
+                        
+                        // Garantindo que só possa cancelar em eventos inscritos com pelo menos 1 dia e 5 horas de antecedencia
+                        $isPodeCancelar = isInscrito($record) &&
+                            $tempo_para_evento->d > 1 ||
+                            ($tempo_para_evento->d == 1 && $tempo_para_evento->h >= 5);
+
+                        return $isPodeCancelar;
                     })
             ])
             ->bulkActions([

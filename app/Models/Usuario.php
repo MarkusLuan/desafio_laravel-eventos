@@ -53,9 +53,7 @@ class Usuario extends Authenticatable implements FilamentUser
     function getIdadeAttribute(): int {
         // Função que calcula a idade
 
-        $dt_nascimento = date_create_from_format('Y-m-d', $this->dt_nascimento);
-
-        $idade = $dt_nascimento
+        $idade = $this->dt_nascimento
             ->diff(new DateTime('now'))
             ->y;
         return $idade;
@@ -88,6 +86,7 @@ class Usuario extends Authenticatable implements FilamentUser
     protected function casts(): array
     {
         return [
+            'dt_nascimento' => 'datetime',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

@@ -43,4 +43,11 @@ class Evento extends Model
     public function getDisplayNameAttribute() {
         return (String) $this;
     }
+
+    protected function casts () {
+        return [
+            'dt_evento' => 'datetime',
+            'dt_cancelamento' => 'datetime'
+        ];
+    }
 }
