@@ -64,12 +64,8 @@ class Usuario extends Authenticatable implements FilamentUser
         return $this->permissao->role == PermissaoEnum::ADMINISTRADOR;
     }
 
-    public function canAccessFilament (): bool {
-        return $this->isFilamentAdmin();
-    }
-
     public function canAccessPanel(Panel $panel): bool {
-        return $this->isFilamentAdmin();
+        return true;
     }
 
     protected static function booted() {
