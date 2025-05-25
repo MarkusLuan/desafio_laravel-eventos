@@ -22,6 +22,7 @@ use App\Models\Evento;
 use App\Models\Inscricao;
 use App\Models\StatusInscricao;
 use DateTime;
+use Illuminate\Database\Eloquent\Builder;
 
 class EventoResource extends Resource
 {
@@ -107,7 +108,8 @@ class EventoResource extends Resource
                     ->label('Preço'),
                 TextColumn::make('dt_evento')
                     ->label('Data do Evento')
-                    ->datetime('d/m/Y \à\s H:i', 'america/recife'),
+                    ->datetime('d/m/Y \à\s H:i', 'america/recife')
+                    ->searchable(),
                 TextColumn::make('dt_cancelamento')
                     ->label('Cancelado em')
                     ->datetime('d/m/Y \à\s H:i', 'america/recife')
@@ -130,14 +132,15 @@ class EventoResource extends Resource
                 CreateInscricaoEventoAction::make()
                     ->visible(function (Evento $record) {
                         $user = auth()->user();
+                        $permissao = $user->permissao->role;
 
                         $isInscrito = isInscrito($record);
-                        $maiorIdadePermitida = auth()->user()->idade >= $record->idade_min;
+                        $ismaiorIdadePermitida = auth()->user()->idade >= $record->idade_min;
 
                         return !((bool) $record->dt_cancelamento) &&
                             !$isInscrito &&
-                            $maiorIdadePermitida &&
-                            !isOrganizador($record);
+                            $ismaiorIdadePermitida &&
+                            $permissao == PermissaoEnum::COMUM;
                     }),
                 DeleteInscricaoEventoAction::make()
                     ->visible(function (Evento $record) {
@@ -187,5 +190,22 @@ class EventoResource extends Resource
             'create' => Pages\CreateEvento::route('/create'),
             'edit' => Pages\EditEvento::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        // Ocultando eventos cancelados e antigos para o usuário comum
+        if ($permissao == PermissaoEnum::COMUM) {
+            $query->where([
+                'dt_cancelamento' => null
+            ])->where('dt_evento', '>=', new DateTime('now'));
+        }
+
+        return $query;
     }
 }
