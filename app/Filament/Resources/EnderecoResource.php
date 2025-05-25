@@ -13,12 +13,21 @@ use Filament\Tables\Table;
 
 use App\Models\Endereco;
 use App\Models\Enums\EstadoEnum;
+use App\Models\Enums\PermissaoEnum;
 
 class EnderecoResource extends Resource
 {
     protected static ?string $model = Endereco::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        return $permissao != PermissaoEnum::COMUM;
+    }
 
     public static function form(Form $form): Form
     {
