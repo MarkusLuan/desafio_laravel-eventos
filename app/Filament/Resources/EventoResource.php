@@ -14,6 +14,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use DateTime;
 
 use App\Models\Endereco;
 use App\Models\Enums\PermissaoEnum;
@@ -21,9 +24,6 @@ use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Evento;
 use App\Models\Inscricao;
 use App\Models\StatusInscricao;
-use DateTime;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class EventoResource extends Resource
 {
@@ -36,7 +36,11 @@ class EventoResource extends Resource
         $user = auth()->user();
         $permissao = $user->permissao->role;
 
-        return $permissao == PermissaoEnum::ADMINISTRADOR;
+        return $permissao == PermissaoEnum::ADMINISTRADOR ||
+            (
+                $permissao == PermissaoEnum::ORGANIZADOR &&
+                $user->id == $record->organizador_id
+            );
     }
 
     public static function form(Form $form): Form
