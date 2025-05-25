@@ -58,7 +58,7 @@ Usuários que buscam participar de eventos, realizando inscrições e pagamentos
 
 #### Administrador
 Responsável pela manutenção e supervisão geral do marketplace.
-- [ ] Gerenciar contas de usuários e organizadores.
+- [x] Gerenciar contas de usuários e organizadores.
 - [ ] Acessar relatórios de vendas e participação nos eventos.
 - [ ] Resolver disputas e questões de suporte.
 

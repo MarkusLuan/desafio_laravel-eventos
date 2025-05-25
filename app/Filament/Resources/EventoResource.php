@@ -23,12 +23,21 @@ use App\Models\Inscricao;
 use App\Models\StatusInscricao;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class EventoResource extends Resource
 {
     protected static ?string $model = Evento::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
+
+    public static function canEdit(Model $record): bool
+    {
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        return $permissao == PermissaoEnum::ADMINISTRADOR;
+    }
 
     public static function form(Form $form): Form
     {
