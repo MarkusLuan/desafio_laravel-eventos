@@ -53,6 +53,7 @@ class EventoResource extends Resource
                     ->displayFormat('F j, Y H:i')
                     ->firstDayOfWeek(1)
                     ->format('Y-m-d H:i')
+                    ->timezone('america/recife')
                     ->minDate(now()->setSeconds(0))
                     ->seconds(false)
                     ->required(),
@@ -106,10 +107,10 @@ class EventoResource extends Resource
                     ->label('Preço'),
                 TextColumn::make('dt_evento')
                     ->label('Data do Evento')
-                    ->datetime('d/m/Y \à\s H:i'),
+                    ->datetime('d/m/Y \à\s H:i', 'america/recife'),
                 TextColumn::make('dt_cancelamento')
                     ->label('Cancelado em')
-                    ->datetime('d/m/Y \à\s H:i')
+                    ->datetime('d/m/Y \à\s H:i', 'america/recife')
                     ->badge()
                     ->color('danger'),
                 TextColumn::make('endereco.display_name')
