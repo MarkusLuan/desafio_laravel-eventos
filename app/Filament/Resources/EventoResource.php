@@ -191,4 +191,21 @@ class EventoResource extends Resource
             'edit' => Pages\EditEvento::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        // Ocultando eventos cancelados e antigos para o usuário comum
+        if ($permissao == PermissaoEnum::COMUM) {
+            $query->where([
+                'dt_cancelamento' => null
+            ])->where('dt_evento', '>=', new DateTime('now'));
+        }
+
+        return $query;
+    }
 }
