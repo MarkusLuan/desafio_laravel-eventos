@@ -33,6 +33,11 @@ class DeleteEventoAction extends Action
 
         $this->successNotificationTitle("Evento cancelado com sucesso!");
 
+        $this->requiresConfirmation()
+            ->modalHeading('Cancelar o Evento?')
+            ->modalDescription('Tem certeza, que deseja cancelar o evento? Os usuários não poderam mais se inscrever e os pagamentos serão extornados! (Esta ação é irrevesivel!)')
+            ->modalSubmitActionLabel('Sim, cancelar!');
+
         $this->action(function () {
             $this->process(function (array $data, Evento $record, Table $table) {
                 $status_inscricao_id = StatusInscricao::where(

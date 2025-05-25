@@ -79,7 +79,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     - [x] Listagem
     - [x] Busca
     - [x] Inscrição
-    - [ ] Cancelamento.
+    - [x] Cancelamento.
 
 #### Inscrições
 * [x] Atributos:
