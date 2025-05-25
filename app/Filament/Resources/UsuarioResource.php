@@ -27,6 +27,14 @@ class UsuarioResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        return $permissao == PermissaoEnum::ADMINISTRADOR;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
