@@ -43,7 +43,7 @@ Minhas perguntas ao chatGPT: https://chatgpt.com/share/6828dd50-e790-8011-ab36-3
 #### Organizador
 Responsável por criar, gerenciar e promover eventos.
 
-- [ ] Criar e editar eventos, incluindo detalhes como data, local, descrição e capacidade
+- [x] Criar e editar eventos, incluindo detalhes como data, local, descrição e capacidade
 - [ ] Visualizar lista de inscritos
 - [ ] Gerenciar inscrições.
 - [ ] Receber pagamentos

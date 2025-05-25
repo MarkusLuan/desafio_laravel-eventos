@@ -24,6 +24,8 @@ use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Evento;
 use App\Models\Inscricao;
 use App\Models\StatusInscricao;
+use Filament\Pages\Page;
+use Filament\Resources\Pages\EditRecord;
 
 class EventoResource extends Resource
 {
@@ -58,7 +60,18 @@ class EventoResource extends Resource
                 //     TextInput::make('complemento')
                 // ]),
 
-                TextInput::make('titulo')->label('Título')->autofocus()->required(),
+                TextInput::make('titulo')
+                    ->label('Título')
+                    ->autofocus()
+                    ->disabled(function (Page $livewire) {
+                        $user = auth()->user();
+                        $permissao = $user->permissao->role;
+
+                        // Apenas o administrador pode editar
+                        return $livewire instanceof(EditRecord::class) &&
+                            $permissao != PermissaoEnum::ADMINISTRADOR;
+                    })
+                    ->required(),
                 TextInput::make('descricao')->label('Descrição')->required(),
                 TextInput::make('capacidade')->numeric()->required(),
                 TextInput::make('idade_min')->label('Idade minima')->numeric()->placeholder('Deixar vazio, caso seja livre para todas as faixas etárias!'),
@@ -184,7 +197,6 @@ class EventoResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
