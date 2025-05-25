@@ -51,10 +51,10 @@ Responsável por criar, gerenciar e promover eventos.
 
 #### Inscrito - Mudei para COMUM
 Usuários que buscam participar de eventos, realizando inscrições e pagamentos.
-- [ ] Procurar eventos por categoria, data ou localização
+- [x] Procurar eventos por categoria, data ou localização
 - [x] Se inscrever em eventos
 - [ ] Realizar pagamentos
-- [ ] Visualizar histórico de eventos inscritos e pagamentos efetuados.
+- [x] Visualizar histórico de eventos inscritos e pagamentos efetuados.
 
 #### Administrador
 Responsável pela manutenção e supervisão geral do marketplace.

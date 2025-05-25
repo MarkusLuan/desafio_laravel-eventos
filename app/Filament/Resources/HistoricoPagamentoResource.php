@@ -3,20 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\HistoricoPagamentoResource\Pages;
-use App\Filament\Resources\HistoricoPagamentoResource\RelationManagers;
-use App\Models\Enums\MetodoPagamentoEnum;
-use App\Models\Enums\StatusPagamentoEnum;
-use App\Models\HistoricoPagamento;
-use App\Models\MetodoPagamento;
-use App\Models\Pagamento;
-use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use App\Models\Enums\MetodoPagamentoEnum;
+use App\Models\Enums\PermissaoEnum;
+use App\Models\Enums\StatusPagamentoEnum;
+use App\Models\HistoricoPagamento;
 
 class HistoricoPagamentoResource extends Resource
 {
@@ -87,5 +82,23 @@ class HistoricoPagamentoResource extends Resource
         return [
             'index' => Pages\ListHistoricoPagamentos::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        // Listando apenas pagamentos efetuadas pelo usuário logado - Usuario COMUM
+        if ($permissao == PermissaoEnum::COMUM) {
+            $query->joinRelationship('pagamento.inscricao')
+            ->where([
+                'inscricoes.usuario_id' => $user->id
+            ]);
+        }
+
+        return $query;
     }
 }
