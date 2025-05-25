@@ -32,8 +32,8 @@ class HistoricoInscricaoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('created_at')
-                    ->datetime('d/m/Y \à\s H:i')
-                    ->label('Data de Alteração'),
+                    ->label('Data de Alteração')
+                    ->datetime('d/m/Y \à\s H:i', 'america/recife'),
                 TextColumn::make('inscricao.evento.display_name')
                     ->label('Evento'),
                 TextColumn::make('status.status')

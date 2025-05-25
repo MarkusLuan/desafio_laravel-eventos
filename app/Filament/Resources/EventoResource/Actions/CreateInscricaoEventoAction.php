@@ -13,7 +13,7 @@ use App\Models\HistoricoInscricao;
 use App\Models\Inscricao;
 use App\Models\StatusInscricao;
 
-class CancelarInscricaoEventoAction extends Action
+class CreateInscricaoEventoAction extends Action
 {
     use CanCustomizeProcess;
 
@@ -21,43 +21,35 @@ class CancelarInscricaoEventoAction extends Action
 
     public static function getDefaultName(): ?string
     {
-        return 'Cancelar Inscrição';
+        return 'Inscrever';
     }
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->icon('heroicon-m-arrow-left-start-on-rectangle');
+        $this->icon('heroicon-m-arrow-right-end-on-rectangle');
 
-        $this->successNotificationTitle("Inscrição cancelada com sucesso!");
+        $this->successNotificationTitle("Inscrito com sucesso!");
 
         $this->action(function () {
             $this->process(function (array $data, Evento $record, Table $table) {
                 $status_inscricao_id = StatusInscricao::where(
-                    'status', StatusInscricaoEnum::CANCELADO
+                    'status', StatusInscricaoEnum::ESPERANDO_PAGAMENTO
                 )->first()->id;
 
-                $inscricao = Inscricao::where([
-                    'usuario_id' => auth()->id(),
+                $inscricao = Inscricao::create(array(
                     'evento_id' => $record->id,
-                ])->orderByDesc('created_at')->first();
-
-                if (!$inscricao or $inscricao->status_inscricao_id == $status_inscricao_id) {
-                    return;
-                }
-
-                $inscricao->update([
                     'status_inscricao_id' => $status_inscricao_id
-                ]);
+                ));
 
-                $historico = HistoricoInscricao::create([
+                $historico = HistoricoInscricao::create(array(
                     'status_inscricao_id' => $status_inscricao_id,
                     'inscricao_id' => $inscricao->id
-                ]);
-
-                $this->success();
+                ));
             });
+
+            $this->success();
         });
     }
 }

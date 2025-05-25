@@ -27,6 +27,6 @@ class DatabaseSeeder extends Seeder
             StatusPagamentoSeeder::class,
         ]);
         
-        Usuario::factory(1)->create();
+        Usuario::factory(10)->create();
     }
 }

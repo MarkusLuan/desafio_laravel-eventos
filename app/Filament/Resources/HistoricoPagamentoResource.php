@@ -39,7 +39,7 @@ class HistoricoPagamentoResource extends Resource
                     ->label('Código'),
                 TextColumn::make('created_at')
                     ->label('Data do Histórico')
-                    ->datetime('d/m/Y \à\s H:i'),
+                    ->datetime('d/m/Y \à\s H:i', 'america/recife'),
                 TextColumn::make('pagamento.valor_pago')
                     ->label("Valor Pago")
                     ->money('BRL'),

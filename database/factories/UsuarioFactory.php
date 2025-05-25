@@ -25,16 +25,25 @@ class UsuarioFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
+    {   
+        $email = fake()->email();
+        $senha = Str::random(12);
+
+        print ("Usário criado $email => $senha\n");
+
         return [
             'uuid' => fake()->uuid(),
             'dt_nascimento' => fake()->date(),
-            'name' => 'admin',
-            'email' => 'admin@teste.com',
+            'name' => fake()->name(),
+            'email' => $email,
             'email_verified_at' => now(),
-            'password' => Hash::make('senhaForte1234@'),
+            'password' => Hash::make($senha),
             'remember_token' => Str::random(10),
-            'permissao_id' => Permissao::where('role', '=', PermissaoEnum::ADMINISTRADOR)->first()->id,
+            'permissao_id' => Permissao::where('role', '=',
+                array_column(
+                    PermissaoEnum::cases(), 'name'
+                )[random_int(0, 1)]
+            )->first()->id,
         ];
     }
 
