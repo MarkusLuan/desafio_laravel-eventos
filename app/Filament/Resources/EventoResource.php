@@ -149,8 +149,10 @@ class EventoResource extends Resource
                         
                         // Garantindo que só possa cancelar em eventos inscritos com pelo menos 1 dia e 5 horas de antecedencia
                         $isPodeCancelar = isInscrito($record) &&
-                            $tempo_para_evento->d > 1 ||
-                            ($tempo_para_evento->d == 1 && $tempo_para_evento->h >= 5);
+                            (
+                                $tempo_para_evento->d > 1 ||
+                                ($tempo_para_evento->d == 1 && $tempo_para_evento->h >= 5)
+                            );
 
                         return $isPodeCancelar;
                     }),
