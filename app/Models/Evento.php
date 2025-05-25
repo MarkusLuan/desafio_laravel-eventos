@@ -14,6 +14,7 @@ class Evento extends Model
         'idade_min',
         'preco',
         'dt_evento',
+        'dt_cancelamento',
         'endereco_id'
     ];
 

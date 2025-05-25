@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventoResource\Actions\DeleteInscricaoEventoAction;
 use App\Filament\Resources\EventoResource\Actions\CreateInscricaoEventoAction;
+use App\Filament\Resources\EventoResource\Actions\DeleteEventoAction;
 use App\Filament\Resources\EventoResource\Pages;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -15,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 use App\Models\Endereco;
+use App\Models\Enums\PermissaoEnum;
 use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Evento;
 use App\Models\Inscricao;
@@ -76,6 +78,16 @@ class EventoResource extends Resource
             return $isInscrito;
         }
 
+        function isOrganizador(Evento $evento) {
+            $user = auth()->user();
+            $permissao = $user->permissao->role;
+
+            return (
+                $permissao == PermissaoEnum::ORGANIZADOR &&
+                $user->id == $evento->organizador_id
+            );
+        }
+
         return $table
             ->columns([
                 TextColumn::make('titulo')
@@ -116,11 +128,15 @@ class EventoResource extends Resource
                 Tables\Actions\EditAction::make(),
                 CreateInscricaoEventoAction::make()
                     ->visible(function (Evento $record) {
+                        $user = auth()->user();
+
                         $isInscrito = isInscrito($record);
                         $maiorIdadePermitida = auth()->user()->idade >= $record->idade_min;
 
-                        return !$isInscrito and
-                            $maiorIdadePermitida;
+                        return !((bool) $record->dt_cancelamento) &&
+                            !$isInscrito &&
+                            $maiorIdadePermitida &&
+                            !isOrganizador($record);
                     }),
                 DeleteInscricaoEventoAction::make()
                     ->visible(function (Evento $record) {
@@ -136,6 +152,15 @@ class EventoResource extends Resource
                             ($tempo_para_evento->d == 1 && $tempo_para_evento->h >= 5);
 
                         return $isPodeCancelar;
+                    }),
+                DeleteEventoAction::make()
+                    ->visible(function (Evento $record) {
+                        $user = auth()->user();
+                        $permissao = $user->permissao->role;
+
+                        return !((bool) $record->dt_cancelamento) &&
+                            $permissao == PermissaoEnum::ADMINISTRADOR ||
+                            isOrganizador($record);
                     })
             ])
             ->bulkActions([
