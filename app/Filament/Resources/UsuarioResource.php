@@ -20,6 +20,8 @@ use App\Models\Enums\PermissaoEnum;
 use App\Models\Permissao;
 use App\Models\Usuario;
 use Filament\Forms\Get;
+use Filament\Pages\Page;
+use Filament\Resources\Pages\EditRecord;
 
 class UsuarioResource extends Resource
 {
@@ -42,9 +44,18 @@ class UsuarioResource extends Resource
                 TextInput::make('name')
                     ->label('Nome Completo')
                     ->minLength(3)
+                    ->disabled(fn (Page $livewire) => $livewire instanceof(EditRecord::class))
                     ->required(),
                 TextInput::make('email')
                     ->email()
+                    ->disabled(function (Page $livewire) {
+                        $user = auth()->user();
+                        $permissao = $user->permissao->role;
+
+                        // Apenas o administrador pode editar
+                        return $livewire instanceof(EditRecord::class) &&
+                            $permissao != PermissaoEnum::ADMINISTRADOR;
+                    })
                     ->required(),
                 DateTimePicker::make('dt_nascimento')->label('Data de Nascimento')
                     ->displayFormat('d/m/Y')
@@ -52,6 +63,14 @@ class UsuarioResource extends Resource
                     ->format('Y-m-d')
                     ->maxDate(now())
                     ->time(false)
+                    ->disabled(function (Page $livewire) {
+                        $user = auth()->user();
+                        $permissao = $user->permissao->role;
+
+                        // Apenas o administrador pode editar
+                        return $livewire instanceof(EditRecord::class) &&
+                            $permissao != PermissaoEnum::ADMINISTRADOR;
+                    })
                     ->required(),
                 Select::make('permissao_id')->label('Permissão')->relationship('permissao', 'id')
                     ->getOptionLabelFromRecordUsing(fn (Permissao $record): string => $record->role->toString())
@@ -72,6 +91,14 @@ class UsuarioResource extends Resource
                             })
                             ->icon('heroicon-o-arrow-path')
                     ])
+                    ->disabled(function (Page $livewire) {
+                        $user = auth()->user();
+                        $permissao = $user->permissao->role;
+
+                        // Apenas o administrador pode editar
+                        return $livewire instanceof(EditRecord::class) &&
+                            $permissao != PermissaoEnum::ADMINISTRADOR;
+                    })
                     ->required(),
             ])->columns(3);
     }
