@@ -83,12 +83,22 @@ class HistoricoInscricaoResource extends Resource
         $user = auth()->user();
         $permissao = $user->permissao->role;
 
-        // Listando apenas inscrições efetuadas pelo usuário logado - Usuario COMUM
-        if ($permissao == PermissaoEnum::COMUM) {
-            $query->joinRelationship('inscricao')
-            ->where([
-                'inscricoes.usuario_id' => $user->id
-            ]);
+        switch ($permissao) {
+            case PermissaoEnum::COMUM:
+                // Listando apenas inscrições efetuadas pelo usuário logado
+                $query->joinRelationship('inscricao')
+                    ->where([
+                        'inscricoes.usuario_id' => $user->id
+                    ]);
+                break;
+            case PermissaoEnum::ORGANIZADOR:
+                // Listando apenas inscrições efetuadas em eventos do organizador
+                $query->joinRelationship('inscricao')
+                    ->joinRelationship('inscricao.evento')
+                    ->where([
+                        'eventos.organizador_id' => $user->id
+                    ]);
+                break;
         }
 
         return $query;
