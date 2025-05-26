@@ -7,8 +7,10 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 use App\Models\Enums\StatusInscricaoEnum;
+use App\Models\Enums\PermissaoEnum;
 use App\Models\HistoricoInscricao;
 
 class HistoricoInscricaoResource extends Resource
@@ -72,5 +74,33 @@ class HistoricoInscricaoResource extends Resource
         return [
             'index' => Pages\ListHistoricoInscricoes::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        switch ($permissao) {
+            case PermissaoEnum::COMUM:
+                // Listando apenas inscrições efetuadas pelo usuário logado
+                $query->joinRelationship('inscricao')
+                    ->where([
+                        'inscricoes.usuario_id' => $user->id
+                    ]);
+                break;
+            case PermissaoEnum::ORGANIZADOR:
+                // Listando apenas inscrições efetuadas em eventos do organizador
+                $query->joinRelationship('inscricao')
+                    ->joinRelationship('inscricao.evento')
+                    ->where([
+                        'eventos.organizador_id' => $user->id
+                    ]);
+                break;
+        }
+
+        return $query;
     }
 }

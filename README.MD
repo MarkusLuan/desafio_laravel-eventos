@@ -43,7 +43,7 @@ Minhas perguntas ao chatGPT: https://chatgpt.com/share/6828dd50-e790-8011-ab36-3
 #### Organizador
 Responsável por criar, gerenciar e promover eventos.
 
-- [ ] Criar e editar eventos, incluindo detalhes como data, local, descrição e capacidade
+- [x] Criar e editar eventos, incluindo detalhes como data, local, descrição e capacidade
 - [ ] Visualizar lista de inscritos
 - [ ] Gerenciar inscrições.
 - [ ] Receber pagamentos
@@ -51,13 +51,14 @@ Responsável por criar, gerenciar e promover eventos.
 
 #### Inscrito - Mudei para COMUM
 Usuários que buscam participar de eventos, realizando inscrições e pagamentos.
-- [ ] Procurar eventos por categoria, data ou localização
-- [ ] Se inscrever em eventos e realizar pagamentos
-- [ ] Visualizar histórico de eventos inscritos e pagamentos efetuados.
+- [x] Procurar eventos por categoria, data ou localização
+- [x] Se inscrever em eventos
+- [ ] Realizar pagamentos
+- [x] Visualizar histórico de eventos inscritos e pagamentos efetuados.
 
 #### Administrador
 Responsável pela manutenção e supervisão geral do marketplace.
-- [ ] Gerenciar contas de usuários e organizadores.
+- [x] Gerenciar contas de usuários e organizadores.
 - [ ] Acessar relatórios de vendas e participação nos eventos.
 - [ ] Resolver disputas e questões de suporte.
 
