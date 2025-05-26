@@ -4,14 +4,19 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\InscricaoResource\Pages;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 
 use App\Models\Enums\PermissaoEnum;
 use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Inscricao;
+use App\Models\StatusInscricao;
 
 class InscricaoResource extends Resource
 {
@@ -22,6 +27,11 @@ class InscricaoResource extends Resource
     protected static ?string $label = 'Inscrições';
     protected static ?string $navigationLabel = 'Inscrições';
 
+    public static function getRoutePrefix(): string
+    {
+        return "/inscricoes";
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -31,6 +41,9 @@ class InscricaoResource extends Resource
                     ->datetime('d/m/Y \à\s H:i', 'america/recife'),
                 TextColumn::make('evento.display_name')
                     ->label('Evento'),
+                TextColumn::make('evento.dt_evento')
+                    ->label('Data do Evento')
+                    ->datetime('d/m/Y \à\s H:i', 'america/recife'),
                 TextColumn::make('status.status')
                     ->label('Situação')
                     ->badge()
@@ -50,7 +63,40 @@ class InscricaoResource extends Resource
                     }),
             ])
             ->filters([
-                //
+                Filter::make('f_dt_evento')->form([
+                    DateTimePicker::make('finpt_dt_evento')->label('Data do Evento')
+                        ->displayFormat('d/m/Y')
+                        ->firstDayOfWeek(1)
+                        ->format('Y-m-d')
+                        ->timezone('america/recife')
+                        ->time(false)
+                ])->query(function (Builder $query, array $data): Builder {
+                    $dtEvento = $data['finpt_dt_evento'];
+                    if (!$dtEvento) return $query;
+
+                    $query->whereHas('evento', fn (Builder $query) => $query->whereDate('dt_evento', '=', $dtEvento));
+                    return $query;
+                }),
+                SelectFilter::make('evento')
+                    ->relationship('evento', 'titulo'),
+                SelectFilter::make('status')
+                    ->label('Situação')
+                    ->relationship('status', 'id')
+                    ->getOptionLabelFromRecordUsing(fn (StatusInscricao $record): string => $record->status->toString()),
+                Filter::make('f_inscrito')->form([
+                    TextInput::make('finpt_inscrito')->label("Nome do Inscrito")
+                ])->query(function (Builder $query, array $data): Builder {
+                    $nomeInscrito = $data['finpt_inscrito'];
+                    if (!$nomeInscrito) return $query;
+
+                    $query->whereRelation('inscrito', 'name', 'like', "%$nomeInscrito%");
+                    return $query;
+                })->visible(function () {
+                    $user = auth()->user();
+                    $permissao = $user->permissao->role;
+
+                    return $permissao != PermissaoEnum::COMUM;
+                })
             ])
             ->actions([])
             ->bulkActions([
