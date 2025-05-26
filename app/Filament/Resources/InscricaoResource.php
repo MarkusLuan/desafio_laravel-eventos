@@ -150,6 +150,11 @@ class InscricaoResource extends Resource
         $permissao = $user->permissao->role;
 
         switch ($permissao) {
+            case PermissaoEnum::ORGANIZADOR:
+                // Listando apenas inscrições de eventos criados pelo organizador
+                $query->whereRelation('evento', 'organizador_id', '=', $user->id);
+                break;
+
             case PermissaoEnum::COMUM:
                 // Listando apenas inscrições efetuadas pelo usuário logado
                 $query->where([
