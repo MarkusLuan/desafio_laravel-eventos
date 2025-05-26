@@ -45,6 +45,14 @@ class EventoResource extends Resource
             );
     }
 
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        return $permissao == PermissaoEnum::ORGANIZADOR;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
