@@ -28,6 +28,13 @@ class PagarInscricaoAction extends Action
 
     public static function getDefaultName(): ?string
     {
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        if ($permissao == PermissaoEnum::ORGANIZADOR) {
+            return "Registrar Pagamento";
+        }
+
         return 'Pagar';
     }
 
@@ -102,7 +109,7 @@ class PagarInscricaoAction extends Action
             $user = auth()->user();
             $permissao = $user->permissao->role;
 
-            return $permissao == PermissaoEnum::COMUM &&
+            return ($permissao == PermissaoEnum::COMUM || $permissao == PermissaoEnum::ORGANIZADOR) &&
                 $record->status->status == StatusInscricaoEnum::ESPERANDO_PAGAMENTO;
         });
     }

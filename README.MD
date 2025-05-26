@@ -45,7 +45,7 @@ Responsável por criar, gerenciar e promover eventos.
 
 - [x] Criar e editar eventos, incluindo detalhes como data, local, descrição e capacidade
 - [x] Visualizar lista de inscritos
-- [ ] Gerenciar inscrições.
+- [x] Gerenciar inscrições.
 - [ ] Receber pagamentos
 - [ ] Acompanhar o status financeiro do evento.
 
