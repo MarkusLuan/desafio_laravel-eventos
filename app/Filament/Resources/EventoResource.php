@@ -224,11 +224,21 @@ class EventoResource extends Resource
         $user = auth()->user();
         $permissao = $user->permissao->role;
 
-        // Ocultando eventos cancelados e antigos para o usuário comum
-        if ($permissao == PermissaoEnum::COMUM) {
-            $query->where([
-                'dt_cancelamento' => null
-            ])->where('dt_evento', '>=', new DateTime('now'));
+        switch ($permissao) {
+            case PermissaoEnum::COMUM:
+                // Ocultando eventos cancelados e antigos para o usuário comum
+                $query->where([
+                    'dt_cancelamento' => null
+                ])->where('dt_evento', '>=', new DateTime('now'));
+                
+                break;
+            case PermissaoEnum::ORGANIZADOR:
+                // Listando apenas eventos do organizador
+                $query->where([
+                    'organizador_id' => $user->id
+                ]);
+                
+                break;
         }
 
         return $query;
