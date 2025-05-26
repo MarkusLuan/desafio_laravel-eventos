@@ -40,23 +40,23 @@ class DeleteEventoAction extends Action
 
         $this->action(function () {
             $this->process(function (array $data, Evento $record, Table $table) {
-                $status_inscricao_id = StatusInscricao::where(
+                $statusInscricaoId = StatusInscricao::where(
                     'status', StatusInscricaoEnum::CANCELADO
                 )->first()->id;
 
                 $inscricoes = Inscricao::where([
                     'evento_id' => $record->id,
                 ])->where(
-                    'status_inscricao_id', '!=', $status_inscricao_id
+                    'status_inscricao_id', '!=', $statusInscricaoId
                 )->orderByDesc('created_at')->get();
 
                 foreach ($inscricoes as $inscricao) {
                     $inscricao->update([
-                        'status_inscricao_id' => $status_inscricao_id
+                        'status_inscricao_id' => $statusInscricaoId
                     ]);
 
                     $historico = HistoricoInscricao::create([
-                        'status_inscricao_id' => $status_inscricao_id,
+                        'status_inscricao_id' => $statusInscricaoId,
                         'inscricao_id' => $inscricao->id
                     ]);
                 }

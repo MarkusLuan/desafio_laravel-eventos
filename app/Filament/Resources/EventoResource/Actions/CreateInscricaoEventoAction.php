@@ -34,17 +34,17 @@ class CreateInscricaoEventoAction extends Action
 
         $this->action(function () {
             $this->process(function (array $data, Evento $record, Table $table) {
-                $status_inscricao_id = StatusInscricao::where(
+                $statusInscricaoId = StatusInscricao::where(
                     'status', StatusInscricaoEnum::ESPERANDO_PAGAMENTO
                 )->first()->id;
 
                 $inscricao = Inscricao::create(array(
                     'evento_id' => $record->id,
-                    'status_inscricao_id' => $status_inscricao_id
+                    'status_inscricao_id' => $statusInscricaoId
                 ));
 
                 $historico = HistoricoInscricao::create(array(
-                    'status_inscricao_id' => $status_inscricao_id,
+                    'status_inscricao_id' => $statusInscricaoId,
                     'inscricao_id' => $inscricao->id
                 ));
             });

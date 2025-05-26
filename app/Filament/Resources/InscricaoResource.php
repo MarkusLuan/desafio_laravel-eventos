@@ -2,48 +2,48 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\HistoricoInscricaoResource\Pages;
+use App\Filament\Resources\InscricaoResource\Actions\DeleteInscricaoAction;
+use App\Filament\Resources\InscricaoResource\Pages;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 
-use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Enums\PermissaoEnum;
-use App\Models\HistoricoInscricao;
+use App\Models\Enums\StatusInscricaoEnum;
+use App\Models\Inscricao;
 use App\Models\StatusInscricao;
+use DateTime;
 
-class HistoricoInscricaoResource extends Resource
+class InscricaoResource extends Resource
 {
-    protected static ?string $model = HistoricoInscricao::class;
+    protected static ?string $model = Inscricao::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $label = 'Histórico Inscrições';
-    protected static ?string $navigationLabel = 'Histórico Inscrições';
-
-    public static function canCreate(): bool { return false; }
+    protected static ?string $label = 'Inscrições';
+    protected static ?string $navigationLabel = 'Inscrições';
 
     public static function getRoutePrefix(): string
     {
-        return "/historico/inscricoes";
+        return "/inscricoes";
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('created_at')
-                    ->label('Data de Alteração')
+                TextColumn::make('updated_at')
+                    ->label('Data Inscrição')
                     ->datetime('d/m/Y \à\s H:i', 'america/recife'),
-                TextColumn::make('inscricao.evento.display_name')
+                TextColumn::make('evento.display_name')
                     ->label('Evento'),
-                TextColumn::make('inscricao.evento.dt_evento')
+                TextColumn::make('evento.dt_evento')
                     ->label('Data do Evento')
                     ->datetime('d/m/Y \à\s H:i', 'america/recife'),
                 TextColumn::make('status.status')
@@ -55,8 +55,8 @@ class HistoricoInscricaoResource extends Resource
                         'danger' => static fn ($state): bool => $state == StatusInscricaoEnum::CANCELADO
                     ])
                     ->formatStateUsing(fn ($state, $record) => $state->toString()),
-                TextColumn::make('inscricao.inscrito.name')
-                    ->label('Inscrito')
+                TextColumn::make('inscrito.name')
+                    ->label('Usuário')
                     ->visible(function () {
                         $user = auth()->user();
                         $permissao = $user->permissao->role;
@@ -76,11 +76,11 @@ class HistoricoInscricaoResource extends Resource
                     $dtEvento = $data['finpt_dt_evento'];
                     if (!$dtEvento) return $query;
 
-                    $query->whereHas('inscricao.evento', fn (Builder $query) => $query->whereDate('dt_evento', '=',$dtEvento));
+                    $query->whereHas('evento', fn (Builder $query) => $query->whereDate('dt_evento', '=', $dtEvento));
                     return $query;
                 }),
                 SelectFilter::make('evento')
-                    ->relationship('inscricao.evento', 'titulo'),
+                    ->relationship('evento', 'titulo'),
                 SelectFilter::make('status')
                     ->label('Situação')
                     ->relationship('status', 'id')
@@ -91,7 +91,7 @@ class HistoricoInscricaoResource extends Resource
                     $nomeInscrito = $data['finpt_inscrito'];
                     if (!$nomeInscrito) return $query;
 
-                    $query->whereRelation('inscricao.inscrito', 'name', 'like', "%$nomeInscrito%");
+                    $query->whereRelation('inscrito', 'name', 'like', "%$nomeInscrito%");
                     return $query;
                 })->visible(function () {
                     $user = auth()->user();
@@ -101,6 +101,27 @@ class HistoricoInscricaoResource extends Resource
                 })
             ])
             ->actions([
+                DeleteInscricaoAction::make()
+                    ->visible(function (Inscricao $record) {
+                        $user = auth()->user();
+                        $permissao = $user->permissao->role;
+
+                        $isPodeCancelar = false;
+
+                        $tempo_para_evento = $record->evento->dt_evento->diff(new DateTime('now'));
+                        
+                        $isPodeCancelar = $record->status->status != StatusInscricaoEnum::CANCELADO;
+
+                        if ($permissao == PermissaoEnum::COMUM) {
+                            $isPodeCancelar = $isPodeCancelar && (
+                                $tempo_para_evento->d > 1 ||
+                                ($tempo_para_evento->d == 1 && $tempo_para_evento->h >= 5)
+                            );
+                        }
+
+                        return $isPodeCancelar;
+                    }),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([]),
@@ -117,7 +138,7 @@ class HistoricoInscricaoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListHistoricoInscricoes::route('/'),
+            'index' => Pages\ListInscricoes::route('/'),
         ];
     }
 
@@ -131,18 +152,9 @@ class HistoricoInscricaoResource extends Resource
         switch ($permissao) {
             case PermissaoEnum::COMUM:
                 // Listando apenas inscrições efetuadas pelo usuário logado
-                $query->joinRelationship('inscricao')
-                    ->where([
-                        'inscricoes.usuario_id' => $user->id
-                    ]);
-                break;
-            case PermissaoEnum::ORGANIZADOR:
-                // Listando apenas inscrições efetuadas em eventos do organizador
-                $query->joinRelationship('inscricao')
-                    ->joinRelationship('inscricao.evento')
-                    ->where([
-                        'eventos.organizador_id' => $user->id
-                    ]);
+                $query->where([
+                    'usuario_id' => $user->id
+                ]);
                 break;
         }
 
