@@ -39,7 +39,7 @@ class DeleteInscricaoEventoAction extends Action
 
         $this->action(function () {
             $this->process(function (array $data, Evento $record, Table $table) {
-                $status_inscricao_id = StatusInscricao::where(
+                $statusInscricaoId = StatusInscricao::where(
                     'status', StatusInscricaoEnum::CANCELADO
                 )->first()->id;
 
@@ -48,16 +48,16 @@ class DeleteInscricaoEventoAction extends Action
                     'evento_id' => $record->id,
                 ])->orderByDesc('created_at')->first();
 
-                if (!$inscricao or $inscricao->status_inscricao_id == $status_inscricao_id) {
+                if (!$inscricao or $inscricao->status_inscricao_id == $statusInscricaoId) {
                     return;
                 }
 
                 $inscricao->update([
-                    'status_inscricao_id' => $status_inscricao_id
+                    'status_inscricao_id' => $statusInscricaoId
                 ]);
 
                 $historico = HistoricoInscricao::create([
-                    'status_inscricao_id' => $status_inscricao_id,
+                    'status_inscricao_id' => $statusInscricaoId,
                     'inscricao_id' => $inscricao->id
                 ]);
 

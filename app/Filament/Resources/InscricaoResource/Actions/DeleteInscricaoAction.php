@@ -38,16 +38,16 @@ class DeleteInscricaoAction extends Action
 
         $this->action(function () {
             $this->process(function (array $data, Inscricao $record, Table $table) {
-                $status_inscricao_id = StatusInscricao::where(
+                $statusInscricaoId = StatusInscricao::where(
                     'status', StatusInscricaoEnum::CANCELADO
                 )->first()->id;
 
                 $record->update([
-                    'status_inscricao_id' => $status_inscricao_id
+                    'status_inscricao_id' => $statusInscricaoId
                 ]);
 
                 $historico = HistoricoInscricao::create([
-                    'status_inscricao_id' => $status_inscricao_id,
+                    'status_inscricao_id' => $statusInscricaoId,
                     'inscricao_id' => $record->id
                 ]);
 

@@ -102,13 +102,13 @@ class EventoResource extends Resource
     public static function table(Table $table): Table
     {
         function isInscrito (Evento $record): bool {
-            $status_inscricao_id = StatusInscricao::where(
+            $statusInscricaoId = StatusInscricao::where(
                 'status', StatusInscricaoEnum::CANCELADO
             )->first()->id;
 
             $isInscrito = Inscricao::where('usuario_id', auth()->id())
                 ->where('evento_id', $record->id)
-                ->where('status_inscricao_id', '!=', $status_inscricao_id)
+                ->where('status_inscricao_id', '!=', $statusInscricaoId)
                 ->exists();
 
             return $isInscrito;
