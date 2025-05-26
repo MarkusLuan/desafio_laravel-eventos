@@ -14,6 +14,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use DateTime;
 
 use App\Models\Endereco;
 use App\Models\Enums\PermissaoEnum;
@@ -21,9 +24,8 @@ use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Evento;
 use App\Models\Inscricao;
 use App\Models\StatusInscricao;
-use DateTime;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Filament\Pages\Page;
+use Filament\Resources\Pages\EditRecord;
 
 class EventoResource extends Resource
 {
@@ -36,7 +38,19 @@ class EventoResource extends Resource
         $user = auth()->user();
         $permissao = $user->permissao->role;
 
-        return $permissao == PermissaoEnum::ADMINISTRADOR;
+        return $permissao == PermissaoEnum::ADMINISTRADOR ||
+            (
+                $permissao == PermissaoEnum::ORGANIZADOR &&
+                $user->id == $record->organizador_id
+            );
+    }
+
+    public static function canCreate(): bool
+    {
+        $user = auth()->user();
+        $permissao = $user->permissao->role;
+
+        return $permissao == PermissaoEnum::ORGANIZADOR;
     }
 
     public static function form(Form $form): Form
@@ -54,7 +68,18 @@ class EventoResource extends Resource
                 //     TextInput::make('complemento')
                 // ]),
 
-                TextInput::make('titulo')->label('Título')->autofocus()->required(),
+                TextInput::make('titulo')
+                    ->label('Título')
+                    ->autofocus()
+                    ->disabled(function (Page $livewire) {
+                        $user = auth()->user();
+                        $permissao = $user->permissao->role;
+
+                        // Apenas o administrador pode editar
+                        return $livewire instanceof(EditRecord::class) &&
+                            $permissao != PermissaoEnum::ADMINISTRADOR;
+                    })
+                    ->required(),
                 TextInput::make('descricao')->label('Descrição')->required(),
                 TextInput::make('capacidade')->numeric()->required(),
                 TextInput::make('idade_min')->label('Idade minima')->numeric()->placeholder('Deixar vazio, caso seja livre para todas as faixas etárias!'),
@@ -180,7 +205,6 @@ class EventoResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -208,11 +232,21 @@ class EventoResource extends Resource
         $user = auth()->user();
         $permissao = $user->permissao->role;
 
-        // Ocultando eventos cancelados e antigos para o usuário comum
-        if ($permissao == PermissaoEnum::COMUM) {
-            $query->where([
-                'dt_cancelamento' => null
-            ])->where('dt_evento', '>=', new DateTime('now'));
+        switch ($permissao) {
+            case PermissaoEnum::COMUM:
+                // Ocultando eventos cancelados e antigos para o usuário comum
+                $query->where([
+                    'dt_cancelamento' => null
+                ])->where('dt_evento', '>=', new DateTime('now'));
+                
+                break;
+            case PermissaoEnum::ORGANIZADOR:
+                // Listando apenas eventos do organizador
+                $query->where([
+                    'organizador_id' => $user->id
+                ]);
+                
+                break;
         }
 
         return $query;
