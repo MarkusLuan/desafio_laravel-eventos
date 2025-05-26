@@ -8,6 +8,11 @@ class HistoricoPagamento extends Model
 {
     protected $table = "historico_pagamento";
 
+    protected $fillable = [
+        'pagamento_id',
+        'status_pagamento_id'
+    ];
+
     function status () {
         return $this->belongsTo(StatusPagamento::class, 'status_pagamento_id');
     }

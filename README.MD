@@ -53,7 +53,7 @@ Responsável por criar, gerenciar e promover eventos.
 Usuários que buscam participar de eventos, realizando inscrições e pagamentos.
 - [x] Procurar eventos por categoria, data ou localização
 - [x] Se inscrever em eventos
-- [ ] Realizar pagamentos
+- [x] Realizar pagamentos
 - [x] Visualizar histórico de eventos inscritos e pagamentos efetuados.
 
 #### Administrador

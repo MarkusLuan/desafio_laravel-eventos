@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InscricaoResource\Actions\DeleteInscricaoAction;
+use App\Filament\Resources\InscricaoResource\Actions\PagarInscricaoAction;
 use App\Filament\Resources\InscricaoResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\TextInput;
@@ -121,7 +122,7 @@ class InscricaoResource extends Resource
 
                         return $isPodeCancelar;
                     }),
-
+                PagarInscricaoAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([]),

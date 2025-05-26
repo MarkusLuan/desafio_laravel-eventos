@@ -31,7 +31,7 @@ class HistoricoPagamentoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('pagamento.uuid')
-                    ->label('Código'),
+                    ->label('Código da Transação'),
                 TextColumn::make('created_at')
                     ->label('Data do Histórico')
                     ->datetime('d/m/Y \à\s H:i', 'america/recife'),
