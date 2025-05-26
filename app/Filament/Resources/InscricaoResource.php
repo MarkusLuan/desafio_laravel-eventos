@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\InscricaoResource\Actions\DeleteInscricaoAction;
 use App\Filament\Resources\InscricaoResource\Pages;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\TextInput;
@@ -17,6 +18,7 @@ use App\Models\Enums\PermissaoEnum;
 use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Inscricao;
 use App\Models\StatusInscricao;
+use DateTime;
 
 class InscricaoResource extends Resource
 {
@@ -98,7 +100,29 @@ class InscricaoResource extends Resource
                     return $permissao != PermissaoEnum::COMUM;
                 })
             ])
-            ->actions([])
+            ->actions([
+                DeleteInscricaoAction::make()
+                    ->visible(function (Inscricao $record) {
+                        $user = auth()->user();
+                        $permissao = $user->permissao->role;
+
+                        $isPodeCancelar = false;
+
+                        $tempo_para_evento = $record->evento->dt_evento->diff(new DateTime('now'));
+                        
+                        $isPodeCancelar = $record->status->status != StatusInscricaoEnum::CANCELADO;
+
+                        if ($permissao == PermissaoEnum::COMUM) {
+                            $isPodeCancelar = $isPodeCancelar && (
+                                $tempo_para_evento->d > 1 ||
+                                ($tempo_para_evento->d == 1 && $tempo_para_evento->h >= 5)
+                            );
+                        }
+
+                        return $isPodeCancelar;
+                    }),
+
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([]),
             ]);
