@@ -75,7 +75,7 @@ class PagarInscricaoAction extends Action
                     'pagamento_id' => $pagamento->id,
                     'status_pagamento_id' => $statusPagamentoEmProcessamento->id
                 ]);
-
+                
                 // Atualiza o pagamento
                 sleep(10); // Mock de pagamento
                 $pagamento->update([

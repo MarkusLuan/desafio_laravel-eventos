@@ -46,8 +46,8 @@ Responsável por criar, gerenciar e promover eventos.
 - [x] Criar e editar eventos, incluindo detalhes como data, local, descrição e capacidade
 - [x] Visualizar lista de inscritos
 - [x] Gerenciar inscrições.
-- [ ] Receber pagamentos
-- [ ] Acompanhar o status financeiro do evento.
+- [x] Receber pagamentos
+- [x] Acompanhar o status financeiro do evento.
 
 #### Inscrito - Mudei para COMUM
 Usuários que buscam participar de eventos, realizando inscrições e pagamentos.
@@ -102,7 +102,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
     * Status
     * Data
 * Funcionalidades:
-    - [ ] Processamento de pagamentos
+    - [x] Processamento de pagamentos
     - [x] Histórico
     - [ ] Reembolsos
 
