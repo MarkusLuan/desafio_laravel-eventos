@@ -49,6 +49,8 @@ class EnderecoResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('cep')
+                    ->searchable(),
                 TextColumn::make('logradouro')
                     ->searchable(),
                 TextColumn::make('bairro')
