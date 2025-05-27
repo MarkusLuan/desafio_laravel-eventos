@@ -126,3 +126,20 @@ Responsável pela manutenção e supervisão geral do marketplace.
 - [ ] Notificações: Enviar notificações por e-mail ou no aplicativo para lembretes de eventos, confirmações de inscrição, e atualizações importantes.
 - [ ] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
 - [ ] Considerações de Segurança e Privacidade
+
+### Como iniciar o projeto
+1. Primeiro é necessário ter o node e o composer instalados no computador...
+2. Em seguida abrir o terminal e digitar o comando
+```shell
+npm install
+```
+3. E iniciar o banco de dados (está configurado para SQLite local), com os comandos
+```shell
+php artisan migrate
+php artisan db:seed
+```
+4. O ultimo comando irá listar os usuários que estão sendo criados, juntamente com as permissões
+5. Por ultimo, basta abrir o comando para iniciar a aplicação na por 8000
+```shell
+composer run dev
+```
