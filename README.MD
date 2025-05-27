@@ -104,7 +104,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
 * Funcionalidades:
     - [x] Processamento de pagamentos
     - [x] Histórico
-    - [ ] Reembolsos
+    - [x] Reembolsos
 
 #### Usuários
 * [x] Atributos:
@@ -117,7 +117,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
         * Inscrito
         * administrador
 * Funcionalidades:
-    - [ ] Registro
+    - [x] Registro (pelo admin)
     - [x] Autenticação
     - [ ] Edição de perfil
 

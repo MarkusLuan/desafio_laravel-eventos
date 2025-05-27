@@ -8,10 +8,14 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 
 use App\Models\Enums\StatusInscricaoEnum;
+use App\Models\Enums\StatusPagamentoEnum;
 use App\Models\Evento;
 use App\Models\HistoricoInscricao;
+use App\Models\HistoricoPagamento;
 use App\Models\Inscricao;
+use App\Models\Pagamento;
 use App\Models\StatusInscricao;
+use App\Models\StatusPagamento;
 use DateTime;
 
 class DeleteEventoAction extends Action
@@ -58,6 +62,29 @@ class DeleteEventoAction extends Action
                     $historico = HistoricoInscricao::create([
                         'status_inscricao_id' => $statusInscricaoId,
                         'inscricao_id' => $inscricao->id
+                    ]);
+
+                    // Extornar pagamentos
+                    $listStatusPagamento = StatusPagamento::get();
+                    $statusPagamentoCancelado = $listStatusPagamento->filter(fn (StatusPagamento $status) => $status->status == StatusPagamentoEnum::CANCELADO)->values()->first();
+                    $statusPagamentoExtornado = $listStatusPagamento->filter(fn (StatusPagamento $status) => $status->status == StatusPagamentoEnum::EXTORNADO)->values()->first();
+
+                    $pagamento = Pagamento::where([
+                        'inscricao_id' => $inscricao->id
+                    ])->first();
+
+                    if (!$pagamento) continue;
+
+                    $statusPagamento = $statusPagamentoExtornado;
+                    if ($pagamento->status->status == StatusPagamentoEnum::EM_PROCESSAMENTO) $statusPagamento = $statusPagamentoCancelado;
+                    
+                    $pagamento->update([
+                        'status_pagamento_id' => $statusPagamento->id
+                    ]);
+
+                    $historicoPagamento = HistoricoPagamento::create([
+                        'pagamento_id' => $pagamento->id,
+                        'status_pagamento_id' => $statusPagamento->id
                     ]);
                 }
 
