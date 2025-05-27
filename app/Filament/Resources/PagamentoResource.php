@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\HistoricoPagamentoResource\Pages;
+use App\Filament\Resources\PagamentoResource\Pages;
 use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Columns\Summarizers\Summarizer;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,33 +14,57 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\Enums\MetodoPagamentoEnum;
 use App\Models\Enums\PermissaoEnum;
 use App\Models\Enums\StatusPagamentoEnum;
-use App\Models\HistoricoPagamento;
+use App\Models\Pagamento;
+use App\Models\StatusPagamento;
 
-class HistoricoPagamentoResource extends Resource
+class PagamentoResource extends Resource
 {
-    protected static ?string $model = HistoricoPagamento::class;
+    protected static ?string $model = Pagamento::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';
-
-    public static function canCreate(): bool { return false; }
-
-    public static function getRoutePrefix(): string
-    {
-        return "/historico/pagamentos";
-    }
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('pagamento.uuid')
+                TextColumn::make('uuid')
                     ->label('Código da Transação'),
-                TextColumn::make('created_at')
-                    ->label('Data do Histórico')
+                TextColumn::make('updated_at')
+                    ->label('Data do Pagamento')
                     ->datetime('d/m/Y \à\s H:i', 'america/recife'),
-                TextColumn::make('pagamento.valor_pago')
+                TextColumn::make('valor_pago')
                     ->label("Valor Pago")
-                    ->money('BRL'),
+                    ->money('BRL')
+                    ->summarize(
+                        Summarizer::make()->using(function ($query) {
+                            $statusPagamentoId = StatusPagamento::where([
+                                'status' => StatusPagamentoEnum::APROVADO
+                            ])->first()->id;
+
+                            $query->where([
+                                'status_pagamento_id' => $statusPagamentoId
+                            ]);
+
+                            return $query->sum('valor_pago');
+                        })
+                        ->label(function () {
+                            $user = auth()->user();
+                            $permissao = $user->permissao->role;
+                            $texto = 'Valor Total';
+                            
+                            switch ($permissao) {
+                                case PermissaoEnum::ORGANIZADOR:
+                                    $texto .= ' Recebido';
+                                    break;
+                                    case PermissaoEnum::COMUM:
+                                        $texto .= ' Pago';
+                                        break;
+                                    }
+                                    
+                                    return $texto;
+                            }
+                        )->money('BRL')
+                    ),
                 TextColumn::make('status.status')
                     ->label('Status')
                     ->badge()
@@ -50,7 +77,7 @@ class HistoricoPagamentoResource extends Resource
                         }
                     ])
                     ->formatStateUsing(fn ($state, $record) => $state->toString()),
-                TextColumn::make('pagamento.metodo.metodo')
+                TextColumn::make('metodo.metodo')
                     ->label('Metodo')
                     ->badge()
                     ->colors([
@@ -62,12 +89,12 @@ class HistoricoPagamentoResource extends Resource
                         }
                     ])
                     ->formatStateUsing(fn ($state, $record) => $state->toString()),
-                TextColumn::make('pagamento.inscricao.evento.display_name')
+                TextColumn::make('inscricao.evento.display_name')
                     ->label("Evento"),
-                TextColumn::make('pagamento.inscricao.evento.dt_evento')
+                TextColumn::make('inscricao.evento.dt_evento')
                     ->label("Data do Evento")
                     ->datetime('d/m/Y \à\s H:i'),
-                TextColumn::make('pagamento.inscricao.inscrito.name')
+                TextColumn::make('inscricao.inscrito.name')
                     ->label('Inscrito')
                     ->visible(function () {
                         $user = auth()->user();
@@ -82,13 +109,14 @@ class HistoricoPagamentoResource extends Resource
             ->actions([
             ])
             ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([]),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListHistoricoPagamentos::route('/'),
+            'index' => Pages\ListPagamentos::route('/')
         ];
     }
 
@@ -102,19 +130,19 @@ class HistoricoPagamentoResource extends Resource
         switch ($permissao) {
             case PermissaoEnum::COMUM:
                 // Listando apenas pagamentos efetuadas pelo usuário logado - Usuario COMUM
-                $query->joinRelationship('pagamento.inscricao')
+                $query->joinRelationship('inscricao')
                 ->where([
                     'inscricoes.usuario_id' => $user->id
                 ]);
-                
+
                 break;
             case PermissaoEnum::ORGANIZADOR:
                 // Listando apenas pagamentos efetuadas nos eventos do organizador
-                $query->joinRelationship('pagamento.inscricao.evento')
+                $query->joinRelationship('inscricao.evento')
                 ->where([
                     'eventos.organizador_id' => $user->id
                 ]);
-
+                
                 break;
         }
 

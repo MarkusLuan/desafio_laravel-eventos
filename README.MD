@@ -45,15 +45,15 @@ Responsável por criar, gerenciar e promover eventos.
 
 - [x] Criar e editar eventos, incluindo detalhes como data, local, descrição e capacidade
 - [x] Visualizar lista de inscritos
-- [ ] Gerenciar inscrições.
-- [ ] Receber pagamentos
-- [ ] Acompanhar o status financeiro do evento.
+- [x] Gerenciar inscrições.
+- [x] Receber pagamentos
+- [x] Acompanhar o status financeiro do evento.
 
 #### Inscrito - Mudei para COMUM
 Usuários que buscam participar de eventos, realizando inscrições e pagamentos.
 - [x] Procurar eventos por categoria, data ou localização
 - [x] Se inscrever em eventos
-- [ ] Realizar pagamentos
+- [x] Realizar pagamentos
 - [x] Visualizar histórico de eventos inscritos e pagamentos efetuados.
 
 #### Administrador
@@ -102,9 +102,9 @@ Responsável pela manutenção e supervisão geral do marketplace.
     * Status
     * Data
 * Funcionalidades:
-    - [ ] Processamento de pagamentos
+    - [x] Processamento de pagamentos
     - [x] Histórico
-    - [ ] Reembolsos
+    - [x] Reembolsos
 
 #### Usuários
 * [x] Atributos:
@@ -117,7 +117,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
         * Inscrito
         * administrador
 * Funcionalidades:
-    - [ ] Registro
+    - [x] Registro (pelo admin)
     - [x] Autenticação
     - [ ] Edição de perfil
 
@@ -126,3 +126,20 @@ Responsável pela manutenção e supervisão geral do marketplace.
 - [ ] Notificações: Enviar notificações por e-mail ou no aplicativo para lembretes de eventos, confirmações de inscrição, e atualizações importantes.
 - [ ] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
 - [ ] Considerações de Segurança e Privacidade
+
+### Como iniciar o projeto
+1. Primeiro é necessário ter o node e o composer instalados no computador...
+2. Em seguida abrir o terminal e digitar o comando
+```shell
+npm install
+```
+3. E iniciar o banco de dados (está configurado para SQLite local), com os comandos
+```shell
+php artisan migrate
+php artisan db:seed
+```
+4. O ultimo comando irá listar os usuários que estão sendo criados, juntamente com as permissões
+5. Por ultimo, basta abrir o comando para iniciar a aplicação na por 8000
+```shell
+composer run dev
+```

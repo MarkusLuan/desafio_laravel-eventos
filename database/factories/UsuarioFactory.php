@@ -28,8 +28,11 @@ class UsuarioFactory extends Factory
     {   
         $email = fake()->email();
         $senha = Str::random(12);
+        $permissao = array_column(
+            PermissaoEnum::cases(), 'name'
+        )[random_int(0, 2)];
 
-        print ("Usário criado $email => $senha\n");
+        print ("Usário [$permissao] criado $email => $senha\n");
 
         return [
             'uuid' => fake()->uuid(),
@@ -39,11 +42,7 @@ class UsuarioFactory extends Factory
             'email_verified_at' => now(),
             'password' => Hash::make($senha),
             'remember_token' => Str::random(10),
-            'permissao_id' => Permissao::where('role', '=',
-                array_column(
-                    PermissaoEnum::cases(), 'name'
-                )[random_int(0, 1)]
-            )->first()->id,
+            'permissao_id' => Permissao::where('role', '=', $permissao)->first()->id,
         ];
     }
 
