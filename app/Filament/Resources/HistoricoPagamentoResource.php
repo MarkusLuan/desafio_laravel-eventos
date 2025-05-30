@@ -46,6 +46,7 @@ class HistoricoPagamentoResource extends Resource
                         'warning' => static fn ($state): bool => $state == StatusPagamentoEnum::EM_PROCESSAMENTO,
                         'danger' => static function ($state): bool {
                             return $state == StatusPagamentoEnum::CANCELADO or
+                                $state == StatusPagamentoEnum::RECUSADO or
                                 $state == StatusPagamentoEnum::EXTORNADO;
                         }
                     ])
