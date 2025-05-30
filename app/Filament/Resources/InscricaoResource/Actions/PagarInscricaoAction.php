@@ -79,14 +79,17 @@ class PagarInscricaoAction extends Action
                     ->label("Metodo")
                     ->options(MetodoPagamentoEnum::class)
                     ->columnSpanFull()
-                    ->reactive(),
+                    ->reactive()
+                    ->required(),
                 static::formPix(),
                 static::formCartao()
             ];
         });
 
         $this->action(function () {
-            $this->process(function (array $data, Inscricao $record, Table $table) {
+            $this->process (function (array $data, Inscricao $record) {
+                $metodoPagamento = array_column(MetodoPagamentoEnum::cases(), null, 'name')[$data["metodo_pagamento"]];
+
                 if ($record->status->status != StatusInscricaoEnum::ESPERANDO_PAGAMENTO) {
                     return;
                 }
@@ -100,7 +103,7 @@ class PagarInscricaoAction extends Action
                 // Registra o pagamento
                 $pagamento = Pagamento::create([
                     'valor_pago' => $record->evento->preco,
-                    'metodo_id' => $listMetodoPagamento->filter(fn (MetodoPagamento $metodo) => $metodo->metodo == MetodoPagamentoEnum::BOLETO)->values()->first()->id,
+                    'metodo_id' => $listMetodoPagamento->filter(fn (MetodoPagamento $metodo) => $metodo->metodo == $metodoPagamento)->values()->first()->id,
                     'inscricao_id' => $record->id,
                     'status_pagamento_id' => $statusPagamentoEmProcessamento->id
                 ]);
@@ -111,7 +114,7 @@ class PagarInscricaoAction extends Action
                 ]);
                 
                 // Atualiza o pagamento
-                sleep(10); // Mock de pagamento
+                sleep(5); // Mock de pagamento
                 $pagamento->update([
                     'status_pagamento_id' => $statusPagamentoAprovado->id
                 ]);

@@ -9,6 +9,7 @@ enum StatusPagamentoEnum {
     case EM_PROCESSAMENTO;
     case EXTORNADO;
     case CANCELADO;
+    case RECUSADO;
 
     function toString(): String {
         return Str::title(
