@@ -18,7 +18,13 @@ use App\Models\MetodoPagamento;
 use App\Models\Pagamento;
 use App\Models\StatusInscricao;
 use App\Models\StatusPagamento;
-use Filament\Notifications\Notification;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Illuminate\Support\HtmlString;
 
 class PagarInscricaoAction extends Action
 {
@@ -50,6 +56,34 @@ class PagarInscricaoAction extends Action
         //     ->modalHeading('Cancelar esta inscrição para o evento?')
         //     ->modalDescription('Tem certeza, que deseja cancelar esta inscrição para o evento? (Esta ação é irrevesivel!)')
         //     ->modalSubmitActionLabel('Sim, cancelar!');
+
+        $this->modalFooterActionsAlignment('right');
+        $this->modalSubmitActionLabel("Realizar Pagamento");
+
+        $this->form(function (Form $form, Inscricao $record) {
+            $inscricao = $record;
+            $evento = $inscricao->evento;
+
+            $form->columns(2);
+
+            return [
+                TextInput::make('evento')
+                    ->default($evento->display_name)
+                    ->disabled(),
+                TextInput::make('preco')
+                    ->label("Preço")
+                    ->prefix("R$")
+                    ->default(number_format($evento->preco, 2, ','))
+                    ->disabled(),
+                Select::make('metodo_pagamento')
+                    ->label("Metodo")
+                    ->options(MetodoPagamentoEnum::class)
+                    ->columnSpanFull()
+                    ->reactive(),
+                static::formPix(),
+                static::formCartao()
+            ];
+        });
 
         $this->action(function () {
             $this->process(function (array $data, Inscricao $record, Table $table) {
@@ -112,5 +146,53 @@ class PagarInscricaoAction extends Action
             return ($permissao == PermissaoEnum::COMUM || $permissao == PermissaoEnum::ORGANIZADOR) &&
                 $record->status->status == StatusInscricaoEnum::ESPERANDO_PAGAMENTO;
         });
+    }
+    
+    private static function formPix(): Section {
+        return Section::make()
+            ->schema([
+                Placeholder::make('qr_pix')
+                    ->content(function ($record): HtmlString {
+                        return new HtmlString("<img src= '" . url('images/qr_code_pix.png') . "')>");
+                    })
+            ])->visible(function (Get $get) {
+                return $get("metodo_pagamento") == MetodoPagamentoEnum::PIX->name;
+            });
+    }
+
+    private static function formCartao(): Section {
+        $anoVencimentoPadrao = date_format(date_create('now'), 'Y');
+
+        return Section::make()
+            ->schema([
+                TextInput::make('numero')
+                    ->label("Número do Cartão")
+                    ->length(16)
+                    ->numeric()
+                    ->required(),
+                TextInput::make('titular')
+                    ->label("Titular do Cartão")
+                    ->required(),
+                Select::make('mes_validade')
+                    ->label("Mês de vencimento")
+                    ->options(range(1, 12))
+                    ->required(),
+                TextInput::make('ano_validade')
+                    ->label("Ano de vencimento")
+                    ->numeric()
+                    ->minLength(4)
+                    ->minValue($anoVencimentoPadrao)
+                    ->default($anoVencimentoPadrao)
+                    ->required(),
+                TextInput::make('cvc')
+                    ->label("Código de INsergurança")
+                    ->numeric()
+                    ->minLength(3)
+                    ->maxLength(4)
+                    ->required(),
+            ])->visible(function (Get $get) {
+                return $get("metodo_pagamento") == MetodoPagamentoEnum::CARTAO_CREDITO->name ||
+                    $get("metodo_pagamento") == MetodoPagamentoEnum::CARTAO_DEBITO->name;
+            });
     }
 }
