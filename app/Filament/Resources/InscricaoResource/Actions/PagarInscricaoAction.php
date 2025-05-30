@@ -7,7 +7,6 @@ use App\Models\Enums\PermissaoEnum;
 use Closure;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Table;
 
 use App\Models\Enums\StatusInscricaoEnum;
 use App\Models\Enums\StatusPagamentoEnum;
@@ -51,11 +50,7 @@ class PagarInscricaoAction extends Action
         $this->icon('heroicon-m-currency-dollar');
 
         $this->successNotificationTitle("Inscrição paga com sucesso!");
-
-        // $this->requiresConfirmation()
-        //     ->modalHeading('Cancelar esta inscrição para o evento?')
-        //     ->modalDescription('Tem certeza, que deseja cancelar esta inscrição para o evento? (Esta ação é irrevesivel!)')
-        //     ->modalSubmitActionLabel('Sim, cancelar!');
+        $this->failureNotificationTitle("O pagamento foi recursado!");
 
         $this->modalFooterActionsAlignment('right');
         $this->modalSubmitActionLabel("Realizar Pagamento");
@@ -91,6 +86,7 @@ class PagarInscricaoAction extends Action
                 $metodoPagamento = array_column(MetodoPagamentoEnum::cases(), null, 'name')[$data["metodo_pagamento"]];
 
                 if ($record->status->status != StatusInscricaoEnum::ESPERANDO_PAGAMENTO) {
+                    $this->failure();
                     return;
                 }
 
@@ -99,6 +95,7 @@ class PagarInscricaoAction extends Action
 
                 $statusPagamentoEmProcessamento = $listStatusPagamento->filter(fn (StatusPagamento $status) => $status->status == StatusPagamentoEnum::EM_PROCESSAMENTO)->values()->first();
                 $statusPagamentoAprovado = $listStatusPagamento->filter(fn (StatusPagamento $status) => $status->status == StatusPagamentoEnum::APROVADO)->values()->first();
+                $statusPagamentoRecursado = $listStatusPagamento->filter(fn (StatusPagamento $status) => $status->status == StatusPagamentoEnum::RECUSADO)->values()->first();
 
                 // Registra o pagamento
                 $pagamento = Pagamento::create([
@@ -113,16 +110,27 @@ class PagarInscricaoAction extends Action
                     'status_pagamento_id' => $statusPagamentoEmProcessamento->id
                 ]);
                 
-                // Atualiza o pagamento
+                // Atualiza o pagamento - Mocagem
+                // Status de pagamento Mocado - Gerado de forma randomica
+                $statusPagamentoId = [
+                    $statusPagamentoAprovado->id,
+                    $statusPagamentoRecursado->id  
+                ][random_int(0, 1)];
+
                 sleep(5); // Mock de pagamento
                 $pagamento->update([
-                    'status_pagamento_id' => $statusPagamentoAprovado->id
+                    'status_pagamento_id' => $statusPagamentoId
                 ]);
 
                 $historicoPagamento = HistoricoPagamento::create([
                     'pagamento_id' => $pagamento->id,
-                    'status_pagamento_id' => $statusPagamentoAprovado->id
+                    'status_pagamento_id' => $statusPagamentoId
                 ]);
+
+                if ($statusPagamentoId != $statusPagamentoAprovado->id) {
+                    $this->failure();
+                    return;
+                }
 
                 // Atualiza inscrição
                 $statusInscricaoId = StatusInscricao::where(
