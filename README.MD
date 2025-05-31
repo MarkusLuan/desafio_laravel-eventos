@@ -37,6 +37,19 @@ Playlist criando o projeto: https://www.youtube.com/watch?v=MX5t5-pVDS4&list=PLE
 
 ---
 
+### Imagens
+<div style="display: flex;" >
+    <img src="./docs/capturas/cap01.png" width="400px" />
+    <img src="./docs/capturas/cap02.png" width="400px" />
+    <img src="./docs/capturas/cap03.png" width="400px" />
+    <img src="./docs/capturas/cap04.png" width="400px" />
+    <img src="./docs/capturas/cap05.png" width="400px" />
+    <img src="./docs/capturas/cap06.png" width="400px" />
+    <img src="./docs/capturas/cap07.png" width="400px" />
+    <img src="./docs/capturas/cap08.png" width="400px" />
+    <img src="./docs/capturas/cap09.png" width="400px" />
+</div>
+
 ### Estrutura do banco
 ![Estrutura do Banco](./docs/estrutura_db.png)
 
@@ -139,7 +152,7 @@ npm install
 php artisan migrate
 php artisan db:seed
 ```
-4. O ultimo comando irá listar os usuários que estão sendo criados, juntamente com as permissões
+4. O ultimo comando irá listar os usuários que estão sendo criados, juntamente com as permissões e senha
 5. Por ultimo, basta abrir o comando para iniciar a aplicação na por 8000
 ```shell
 composer run dev
