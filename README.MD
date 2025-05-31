@@ -60,7 +60,7 @@ Usuários que buscam participar de eventos, realizando inscrições e pagamentos
 #### Administrador
 Responsável pela manutenção e supervisão geral do marketplace.
 - [x] Gerenciar contas de usuários e organizadores.
-- [ ] Acessar relatórios de vendas e participação nos eventos.
+- [x] Acessar relatórios de vendas e participação nos eventos.
 - [ ] Resolver disputas e questões de suporte.
 
 ---
@@ -125,7 +125,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
 
 ### Funcionalidades Adicionais
 - [ ] Notificações: Enviar notificações por e-mail ou no aplicativo para lembretes de eventos, confirmações de inscrição, e atualizações importantes.
-- [ ] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
+- [x] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
 - [ ] Considerações de Segurança e Privacidade
 
 ### Como iniciar o projeto
