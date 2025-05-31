@@ -10,6 +10,7 @@ Deverá criar um site em Laravel e Filament para um sistema de eventos
     * Laravel (Já vi por cima, mas nunca mexi)
     * Filament (Descobri agora sobre ele)
 * Prazo: Dia 26/05/2025 (Segunda-feira)
+* Foi me dado a oportunidade de finalizar mesmo após o prazo
 
 ---
 
