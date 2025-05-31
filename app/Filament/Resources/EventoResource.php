@@ -224,6 +224,7 @@ class EventoResource extends Resource
             'index' => Pages\ListEventos::route('/'),
             'create' => Pages\CreateEvento::route('/create'),
             'edit' => Pages\EditEvento::route('/{record}/edit'),
+            'view' => Pages\ViewEvento::route('/{record}'),
         ];
     }
 

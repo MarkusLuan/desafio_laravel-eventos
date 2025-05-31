@@ -79,7 +79,11 @@ class CalendarioEventosWidget extends FullCalendarWidget
                 ->title($evento->titulo)
                 ->backgroundColor($cor)
                 ->start($evento->dt_evento)
-                ->end($evento->dt_evento);
+                ->end($evento->dt_evento)
+                ->url(
+                    url: EventoResource::getUrl(name: 'view', parameters: ['record' => $evento]),
+                    shouldOpenUrlInNewTab: true
+                );
         })->toArray();
     }
 }
