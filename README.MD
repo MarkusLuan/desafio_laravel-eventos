@@ -33,8 +33,8 @@ Root/
 └── vendor/              => Dependencias do composer
 ```
 
-Minhas perguntas ao chatGPT: https://chatgpt.com/share/6828dd50-e790-8011-ab36-334dc0222c27
-Playlist criando o projeto: https://www.youtube.com/watch?v=MX5t5-pVDS4&list=PLEna1cPjuN6qDlqeQdjB8poXW_mz8ZaLz&index=8
+* Minhas perguntas ao chatGPT: https://chatgpt.com/share/6828dd50-e790-8011-ab36-334dc0222c27
+* Playlist criando o projeto: https://www.youtube.com/watch?v=MX5t5-pVDS4&list=PLEna1cPjuN6qDlqeQdjB8poXW_mz8ZaLz&index=8
 
 ---
 
