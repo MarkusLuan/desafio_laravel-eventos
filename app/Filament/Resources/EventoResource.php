@@ -200,9 +200,10 @@ class EventoResource extends Resource
                         $user = auth()->user();
                         $permissao = $user->permissao->role;
 
-                        return !((bool) $record->dt_cancelamento) &&
+                        return !((bool) $record->dt_cancelamento) && (
                             $permissao == PermissaoEnum::ADMINISTRADOR ||
-                            isOrganizador($record);
+                            isOrganizador($record)
+                        );
                     })
             ])
             ->bulkActions([
