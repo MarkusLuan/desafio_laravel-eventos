@@ -27,7 +27,6 @@ class Evento extends Model
         });
     }
 
-
     public function organizador() {
         return $this->belongsTo(Usuario::class);
     }

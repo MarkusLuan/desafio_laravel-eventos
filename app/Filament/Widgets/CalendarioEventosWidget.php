@@ -42,6 +42,17 @@ class CalendarioEventosWidget extends FullCalendarWidget
                     'eventos.organizador_id' => Auth()->id(),
                 ]);
                 break;
+            case PermissaoEnum::COMUM:
+                $eventosQuery->leftJoin('inscricoes', 'inscricoes.evento_id', '=', 'eventos.id')
+                    ->where(function ($query) {
+                        $query->where('inscricoes.usuario_id', Auth()->id())
+                            ->whereNotNull('eventos.dt_cancelamento')
+                            ->whereNull('inscricoes.id');
+                    })
+                    ->orWhereNull('eventos.dt_cancelamento')
+                    ->distinct()
+                    ->select('eventos.*');
+                break;
         }
 
         return $eventosQuery->get()->map(function (Evento $evento) use ($permissao) {
@@ -50,15 +61,15 @@ class CalendarioEventosWidget extends FullCalendarWidget
             if ($evento->dt_cancelamento) {
                 $cor = 'red';
             } else if ($permissao == PermissaoEnum::COMUM) {
-                $inscricao = Inscricao::
+                $isInscrito = Inscricao::
                     whereRelation('status', [
                         'status' => StatusInscricaoEnum::INSCRITO
                     ])->where([
                         'usuario_id' => Auth()->id(),
                         'evento_id' => $evento->id
-                    ])->first();
+                    ])->exists();
 
-                if ($inscricao) {
+                if ($isInscrito) {
                     $cor = 'green';
                 }
             }
