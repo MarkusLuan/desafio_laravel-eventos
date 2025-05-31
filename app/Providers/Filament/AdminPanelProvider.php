@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\CalendarioEventosWidget;
 use App\Filament\Widgets\EventosInfoWidget;
 use App\Filament\Widgets\UserInfoWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -19,6 +20,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -40,6 +42,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 UserInfoWidget::class,
                 EventosInfoWidget::class,
+                CalendarioEventosWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -54,6 +57,14 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])->plugin(
+                FilamentFullCalendarPlugin::make()
+                    ->selectable()
+                    ->editable()
+                    ->timezone(config('app.timezone'))
+                    ->locale(config('app.locale'))
+                    ->plugins(['dayGrid', 'timeGrid'])
+                    ->config([])
+            );
     }
 }
