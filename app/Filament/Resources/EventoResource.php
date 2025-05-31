@@ -156,7 +156,9 @@ class EventoResource extends Resource
                         'bairro',
                         'cidade',
                         'uf',
-                    ])
+                    ]),
+                TextColumn::make('organizador.name')
+                    ->label('Organizado por')
             ])
             ->filters([
                 //
@@ -198,9 +200,10 @@ class EventoResource extends Resource
                         $user = auth()->user();
                         $permissao = $user->permissao->role;
 
-                        return !((bool) $record->dt_cancelamento) &&
+                        return !((bool) $record->dt_cancelamento) && (
                             $permissao == PermissaoEnum::ADMINISTRADOR ||
-                            isOrganizador($record);
+                            isOrganizador($record)
+                        );
                     })
             ])
             ->bulkActions([
@@ -221,6 +224,7 @@ class EventoResource extends Resource
             'index' => Pages\ListEventos::route('/'),
             'create' => Pages\CreateEvento::route('/create'),
             'edit' => Pages\EditEvento::route('/{record}/edit'),
+            'view' => Pages\ViewEvento::route('/{record}'),
         ];
     }
 

@@ -10,6 +10,7 @@ Deverá criar um site em Laravel e Filament para um sistema de eventos
     * Laravel (Já vi por cima, mas nunca mexi)
     * Filament (Descobri agora sobre ele)
 * Prazo: Dia 26/05/2025 (Segunda-feira)
+* Foi me dado a oportunidade de finalizar mesmo após o prazo
 
 ---
 
@@ -37,6 +38,19 @@ Playlist criando o projeto: https://www.youtube.com/watch?v=MX5t5-pVDS4&list=PLE
 
 ---
 
+### Imagens
+<div style="display: flex;" >
+    <img src="./docs/capturas/cap01.png" width="400px" />
+    <img src="./docs/capturas/cap02.png" width="400px" />
+    <img src="./docs/capturas/cap03.png" width="400px" />
+    <img src="./docs/capturas/cap04.png" width="400px" />
+    <img src="./docs/capturas/cap05.png" width="400px" />
+    <img src="./docs/capturas/cap06.png" width="400px" />
+    <img src="./docs/capturas/cap07.png" width="400px" />
+    <img src="./docs/capturas/cap08.png" width="400px" />
+    <img src="./docs/capturas/cap09.png" width="400px" />
+</div>
+
 ### Estrutura do banco
 ![Estrutura do Banco](./docs/estrutura_db.png)
 
@@ -60,7 +74,7 @@ Usuários que buscam participar de eventos, realizando inscrições e pagamentos
 #### Administrador
 Responsável pela manutenção e supervisão geral do marketplace.
 - [x] Gerenciar contas de usuários e organizadores.
-- [ ] Acessar relatórios de vendas e participação nos eventos.
+- [x] Acessar relatórios de vendas e participação nos eventos.
 - [ ] Resolver disputas e questões de suporte.
 
 ---
@@ -125,8 +139,8 @@ Responsável pela manutenção e supervisão geral do marketplace.
 
 ### Funcionalidades Adicionais
 - [ ] Notificações: Enviar notificações por e-mail ou no aplicativo para lembretes de eventos, confirmações de inscrição, e atualizações importantes.
-- [ ] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
-- [ ] Considerações de Segurança e Privacidade
+- [x] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
+- [x] Considerações de Segurança e Privacidade
 
 ### Como iniciar o projeto
 1. Primeiro é necessário ter o node e o composer instalados no computador...
@@ -139,7 +153,7 @@ npm install
 php artisan migrate
 php artisan db:seed
 ```
-4. O ultimo comando irá listar os usuários que estão sendo criados, juntamente com as permissões
+4. O ultimo comando irá listar os usuários que estão sendo criados, juntamente com as permissões e senha
 5. Por ultimo, basta abrir o comando para iniciar a aplicação na por 8000
 ```shell
 composer run dev

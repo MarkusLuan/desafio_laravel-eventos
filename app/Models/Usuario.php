@@ -87,4 +87,8 @@ class Usuario extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
+
+    public function getRouteKeyName(): string {
+        return 'uuid';
+    }
 }

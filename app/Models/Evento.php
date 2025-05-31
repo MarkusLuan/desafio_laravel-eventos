@@ -27,9 +27,8 @@ class Evento extends Model
         });
     }
 
-
     public function organizador() {
-        return $this->hasOne(Usuario::class);
+        return $this->belongsTo(Usuario::class);
     }
 
     public function endereco() {
@@ -50,5 +49,9 @@ class Evento extends Model
             'dt_evento' => 'datetime',
             'dt_cancelamento' => 'datetime'
         ];
+    }
+
+    public function getRouteKeyName(): string {
+        return 'uuid';
     }
 }

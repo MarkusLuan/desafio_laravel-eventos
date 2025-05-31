@@ -34,4 +34,8 @@ class Inscricao extends Model
     function status () {
         return $this->belongsTo(StatusInscricao::class, 'status_inscricao_id');
     }
+
+    public function getRouteKeyName(): string {
+        return 'uuid';
+    }
 }

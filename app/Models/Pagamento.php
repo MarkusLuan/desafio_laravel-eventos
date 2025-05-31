@@ -31,4 +31,8 @@ class Pagamento extends Model
     function status() {
         return $this->belongsTo(StatusPagamento::class, 'status_pagamento_id');
     }
+
+    public function getRouteKeyName(): string {
+        return 'uuid';
+    }
 }
