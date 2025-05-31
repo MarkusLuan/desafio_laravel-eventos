@@ -50,4 +50,8 @@ class Evento extends Model
             'dt_cancelamento' => 'datetime'
         ];
     }
+
+    public function getRouteKeyName(): string {
+        return 'uuid';
+    }
 }

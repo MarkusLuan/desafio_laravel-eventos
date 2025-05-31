@@ -126,7 +126,7 @@ Responsável pela manutenção e supervisão geral do marketplace.
 ### Funcionalidades Adicionais
 - [ ] Notificações: Enviar notificações por e-mail ou no aplicativo para lembretes de eventos, confirmações de inscrição, e atualizações importantes.
 - [x] Relatórios e Análises: Ferramentas para análise de dados de eventos, inscrições e pagamentos.
-- [ ] Considerações de Segurança e Privacidade
+- [x] Considerações de Segurança e Privacidade
 
 ### Como iniciar o projeto
 1. Primeiro é necessário ter o node e o composer instalados no computador...

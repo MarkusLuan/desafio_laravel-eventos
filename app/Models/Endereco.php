@@ -53,4 +53,8 @@ class Endereco extends Model
     public function getDisplayNameAttribute() {
         return (String) $this;
     }
+
+    public function getRouteKeyName(): string {
+        return 'uuid';
+    }
 }
