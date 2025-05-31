@@ -156,7 +156,9 @@ class EventoResource extends Resource
                         'bairro',
                         'cidade',
                         'uf',
-                    ])
+                    ]),
+                TextColumn::make('organizador.name')
+                    ->label('Organizado por')
             ])
             ->filters([
                 //

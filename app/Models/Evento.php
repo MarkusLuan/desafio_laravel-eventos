@@ -29,7 +29,7 @@ class Evento extends Model
 
 
     public function organizador() {
-        return $this->hasOne(Usuario::class);
+        return $this->belongsTo(Usuario::class);
     }
 
     public function endereco() {
